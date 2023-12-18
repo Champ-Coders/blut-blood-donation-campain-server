@@ -28,4 +28,4 @@ const colonySchema = new Schema<IBanner, BannerModel>(
   }
 )
 
-export const Banner = model('Colony', colonySchema)
+export const Banner = model('Banner', colonySchema)
