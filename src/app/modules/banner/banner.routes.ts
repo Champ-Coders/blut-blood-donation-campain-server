@@ -12,7 +12,7 @@ router.patch(
 )
 router.delete('/:id', BannerController.deleteData)
 router.post(
-  '/create-Banner',
+  '/create-banner',
 
   BannerController.insertIntoDB
 )
