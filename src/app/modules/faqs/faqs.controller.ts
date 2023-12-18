@@ -11,7 +11,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   sendResponse<IFaqs>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Faqs Create Succssfully!',
+    message: 'Faqs Create Successfully!',
     data: result,
   })
 })
@@ -21,7 +21,7 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'All Data Retrived Succssfully!',
+    message: 'All Data Retrieved Successfully!',
     data: result,
   })
 })
@@ -32,7 +32,7 @@ const getSingleData = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'All Data Retrived Succssfully!',
+    message: 'All Data Retrieved Successfully!',
     data: result,
   })
 })
@@ -44,7 +44,7 @@ const updateData = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Data Updated Succssfully!',
+    message: 'Data Updated Successfully!',
     data: result,
   })
 })
@@ -55,7 +55,7 @@ const deleteData = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Data Deleted Succssfully!',
+    message: 'Data Deleted Successfully!',
     data: result,
   })
 })
