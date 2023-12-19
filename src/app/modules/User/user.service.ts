@@ -1,126 +1,172 @@
-import httpStatus from "http-status";
-import ApiError from "../../../errors/ApiErrors";
+import httpStatus from 'http-status'
+import ApiError from '../../../errors/ApiErrors'
 import {
+  IChangePassword,
   ILoginUser,
-  ILoginUserResponse,
-  IMyProfile,
   IRefreshTokenResponse,
-} from "./user.constant";
-import { IUser } from "./user.interface";
-import { User } from "./user.modal";
-import config from "../../../config";
-import { JwtPayload, Secret } from "jsonwebtoken";
-import { jwtHelpers } from "../../../helpers/jwtHelpers";
+} from './user.constant'
+import { IUser } from './user.interface'
+import { User } from './user.modal'
+import config from '../../../config'
+import { Secret } from 'jsonwebtoken'
+import { jwtHelpers } from '../../../helpers/jwtHelpers'
+import { UserInfoFromToken } from '../../../interfaces/common'
 
-const createUserService = async (payload: IUser): Promise<IUser> => {
-  const result = await User.create(payload);
+const createUser = async (
+  user: IUser
+): Promise<{ userInfo: IUser; accessToken: string } | null> => {
+  const checkNumber = await User.findOne({ phoneNumber: user.phoneNumber })
+  const checkEmail = await User.findOne({ email: user.email })
 
-
-  return result;
-};
-
-const loginService = async (
-  payload: ILoginUser
-): Promise<ILoginUserResponse> => {
-  const { email, password } = payload;
-
-  const isUserExist = await User.isUserExist(email);
-
-  if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
+  if (checkEmail) {
+    throw new ApiError(httpStatus.CONFLICT, 'Already used this email!!!')
+  }
+  if (checkNumber) {
+    throw new ApiError(httpStatus.CONFLICT, 'Already used this phone number!!!')
+  }
+  const createdUser = await User.create(user)
+  if (!createdUser) {
+    throw new ApiError(400, 'Failed to create user!')
+  }
+  const result = await User.findById(createdUser._id)
+  if (!result) {
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      'INTERNAL_SERVER_ERROR, Please try again later!!!'
+    )
+  }
+  const tokenInfo = {
+    id: createdUser.id,
+    email: user.email,
+    role: 'user',
   }
 
-  if (
-    isUserExist.password &&
-    !(await User.isPasswordMatched(password, isUserExist?.password))
-  ) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Password is incorrect");
-  }
-
-  //create access token & refresh token
-  const { _id, email: userEmail } = isUserExist;
   const accessToken = jwtHelpers.createToken(
-    { userEmail, _id },
+    tokenInfo,
     config.jwt.jwt_secret as Secret,
     config.jwt.access_token_expires_in as string
-  );
+  )
+  return { userInfo: result, accessToken }
+}
 
-  const refreshToken = jwtHelpers.createToken(
-    { userEmail, _id },
-    config.jwt.refresh_token_secret as Secret,
-    config.jwt.refresh_token_expires_in as string
-  );
+const loginUser = async (payload: ILoginUser): Promise<string> => {
+  const { email, password } = payload
 
-  const userInfo = {
-    _id: isUserExist._id,
-    email: isUserExist.email,
-    name: isUserExist.name,
-  };
+  const isUserExist = await User.isUserExist(email)
 
-  return {
-    accessToken,
-    refreshToken,
-    user: userInfo,
-  };
-};
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist.")
+  }
+
+  if (!(await User.isPasswordMatched(password, isUserExist.password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect.')
+  }
+
+  const { role, id } = isUserExist
+  const accessToken = jwtHelpers.createToken(
+    { id, email, role },
+    config.jwt.jwt_secret as Secret,
+    config.jwt.access_token_expires_in as string
+  )
+
+  return accessToken
+}
 
 const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
-  let verifiedToken = null;
+  let verifiedToken = null
   try {
     verifiedToken = jwtHelpers.verifyToken(
       token,
       config.jwt.refresh_token_secret as Secret
-    );
+    )
   } catch (err) {
-    throw new ApiError(httpStatus.FORBIDDEN, "Invalid Refresh Token");
+    throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Refresh Token')
   }
 
-  const { userEmail } = verifiedToken;
+  const { email } = verifiedToken
 
-  console.log(verifiedToken);
-
-  const isUserExist = await User.isUserExist(userEmail);
+  const isUserExist = await User.isUserExist(email)
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
   }
   //generate new token
 
   const newAccessToken = jwtHelpers.createToken(
     {
+      id: isUserExist.id,
       email: isUserExist.email,
-      name: isUserExist.name,
-      _id: isUserExist._id,
+      role: isUserExist.role,
     },
     config.jwt.jwt_secret as Secret,
     config.jwt.access_token_expires_in as string
-  );
+  )
 
   return {
     accessToken: newAccessToken,
-  };
-};
+  }
+}
 
-const myProfileService = async (
-  userData: JwtPayload
-): Promise<IMyProfile | null> => {
-  const result = await User.findOne(
-    { _id: userData._id },
-    {
-      name: 1,
-      email: 1,
-    }
-  );
-
+const myProfile = async (
+  userInfo: UserInfoFromToken
+): Promise<IUser | null> => {
+  const result = await User.findById(userInfo.id).select('+notification')
   if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not Found !!");
+    throw new ApiError(httpStatus.CONFLICT, 'Your profile is not exist!!!')
+  }
+  return result
+}
+
+const updateProfile = async (
+  payload: Partial<IUser>,
+  userInfo: UserInfoFromToken
+): Promise<IUser | null> => {
+  const isUserExist = await User.findById(userInfo.id)
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
   }
 
-  return result;
-};
+  if (payload.phoneNumber) {
+    const checkNumber = await User.findOne({
+      phoneNumber: payload.phoneNumber,
+    })
+
+    if (checkNumber) {
+      throw new ApiError(httpStatus.CONFLICT, 'Already used this number!!!')
+    }
+  }
+
+  const result = await User.findOneAndUpdate({ _id: userInfo.id }, payload, {
+    new: true,
+  })
+  return result
+}
+
+const changePassword = async (
+  userInfo: UserInfoFromToken,
+  payload: IChangePassword
+): Promise<void> => {
+  const { oldPassword, newPassword } = payload
+
+  const isUserExist = await User.findById(userInfo.id).select({
+    password: true,
+  })
+
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
+  }
+
+  if (!(await User.isPasswordMatched(oldPassword, isUserExist.password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Old Password is incorrect')
+  }
+  isUserExist.password = newPassword
+  isUserExist.save()
+}
 
 export const UserService = {
-  createUserService,
-  loginService,
+  createUser,
+  loginUser,
   refreshToken,
-  myProfileService,
-};
+  myProfile,
+  updateProfile,
+  changePassword,
+}

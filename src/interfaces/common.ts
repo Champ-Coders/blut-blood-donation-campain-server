@@ -19,7 +19,7 @@ export type IGenericResponse<T> = {
 }
 
 export type UserInfoFromToken = {
-  _id: Types.ObjectId
+  id: Types.ObjectId
   email: string
   iat: number
   exp: number

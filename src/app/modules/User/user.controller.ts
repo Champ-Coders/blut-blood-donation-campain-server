@@ -4,14 +4,17 @@ import sendResponse from '../../../shared/sendResponse'
 import httpStatus from 'http-status'
 import { UserService } from './user.service'
 import config from '../../../config'
-import { jwtHelpers } from '../../../helpers/jwtHelpers'
-import { Secret } from 'jsonwebtoken'
-import { IMyProfile } from './user.constant'
+import { UserInfoFromToken } from '../../../interfaces/common'
+// import { jwtHelpers } from '../../../helpers/jwtHelpers'
+// import { Secret } from 'jsonwebtoken'
+// import { userFilterableField } from './user.constant'
+// import pick from '../../../shared/pick'
+// import { paginationFields } from '../../../constants/pagination'
 
-const createUserController = catchAsync(async (req: Request, res: Response) => {
+const createUser = catchAsync(async (req: Request, res: Response) => {
   const { ...userData } = req.body
 
-  const result = await UserService.createUserService(userData)
+  const result = await UserService.createUser(userData)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -21,25 +24,14 @@ const createUserController = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-const loginController = catchAsync(async (req: Request, res: Response) => {
-  const { ...loginData } = req.body
-
-  const result = await UserService.loginService(loginData)
-
-  const { refreshToken, ...others } = result
-
-  const cookieOptions = {
-    secure: config.env === 'production',
-    httpOnly: true,
-  }
-
-  res.cookie('refreshToken', refreshToken, cookieOptions)
+const loginUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.loginUser(req.body)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'user login successfully',
-    data: others,
+    message: 'User logged in successfully!',
+    data: { accessToken: result },
   })
 })
 
@@ -65,19 +57,11 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-const myProfileController = catchAsync(async (req: Request, res: Response) => {
-  const userData = jwtHelpers.verifyToken(
-    req.headers.authorization as string,
-    config.jwt.jwt_secret as Secret
-  )
+const myProfile = catchAsync(async (req: Request, res: Response) => {
+  const userInfo = req?.user
+  const result = await UserService.myProfile(userInfo as UserInfoFromToken)
 
-  console.log(userData)
-
-  const result = await UserService.myProfileService(userData)
-
-  console.log(result)
-
-  sendResponse<IMyProfile>(res, {
+  sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Users information retrieved successfully',
@@ -85,9 +69,89 @@ const myProfileController = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+  const userInfo = req?.user
+
+  const result = await UserService.updateProfile(
+    req.body,
+    userInfo as UserInfoFromToken
+  )
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile updated successfully!',
+    data: result,
+  })
+})
+
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const userInfo = req?.user
+
+  await UserService.changePassword(userInfo as UserInfoFromToken, req.body)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password changed successfully!',
+  })
+})
+
+// const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+//   const filters = pick(req.query, userFilterableField)
+//   const paginationOptions = pick(req.query, paginationFields)
+
+//   const result = await UserService.getAllUsers(filters, paginationOptions)
+
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'All users retrieved Successfully!',
+//     data: result,
+//   })
+// })
+
+// const getIndividualGroupUsers = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const group = req.params.group
+//     const filters = pick(req.query, userFilterableField)
+//     const paginationOptions = pick(req.query, paginationFields)
+
+//     const result = await UserService.getIndividualGroupUsers(
+//       filters,
+//       paginationOptions,
+//       group
+//     )
+
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: `All ${group}users retrieved Successfully!`,
+//       data: result,
+//     })
+//   }
+// )
+
+// const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+//   const id = req.params.id
+
+//   const result = await UserService.getSingleUser(id)
+
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'User retrieved successfully!',
+//     data: result,
+//   })
+// })
 export const UserController = {
-  createUserController,
-  loginController,
+  createUser,
+  loginUser,
   refreshToken,
-  myProfileController,
+  myProfile,
+  updateProfile,
+  changePassword,
+  // getAllUsers,
+  // getIndividualGroupUsers,
+  // getSingleUser,
 }
