@@ -28,6 +28,14 @@ export const userSchema = new Schema<IUser, UserModel>({
     enum: BloodGroups,
     required: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
+  dateOfBirth: {
+    type: Date,
+    required: true,
+  },
   totalDonation: {
     type: Number,
     required: true,

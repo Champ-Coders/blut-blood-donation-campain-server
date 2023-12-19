@@ -7,6 +7,8 @@ export type IUser = {
   password: string
   phoneNumber: string
   bloodGroup: Group
+  dateOfBirth: Date
+  address: string
   totalDonation: number
   lastDonation?: Date
   totalReceived: number

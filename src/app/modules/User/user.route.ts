@@ -1,14 +1,24 @@
-import express from "express";
-import { UserController } from "./user.controller";
+import express from 'express'
+import { UserController } from './user.controller'
+import { RequestValidation } from '../../middleware/validateRequest'
+import { UserValidation } from './user.validation'
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/registration", UserController.createUserController);
+router.post(
+  '/registration',
+  RequestValidation(UserValidation.createUserZodSchema),
+  UserController.createUserController
+)
 
-router.post("/login", UserController.loginController);
+router.post(
+  '/login',
+  RequestValidation(UserValidation.loginUserZodSchema),
+  UserController.loginController
+)
 
-router.post("/refresh-token", UserController.refreshToken);
+router.post('/refresh-token', UserController.refreshToken)
 
-router.get("/my-profile", UserController.myProfileController);
+router.get('/my-profile', UserController.myProfileController)
 
-export const userRoutes = router;
+export const userRoutes = router
