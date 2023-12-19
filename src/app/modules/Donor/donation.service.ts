@@ -16,7 +16,7 @@ const bloodRequest = async (
   payload: Partial<IDonation>,
   userInfo: UserInfoFromToken
 ): Promise<IDonation | null> => {
-  const user = await User.findById(userInfo._id)
+  const user = await User.findById(userInfo.id)
   if (!user) {
     throw new ApiError(httpStatus.CONFLICT, 'Your profile does not exist!!!')
   }
@@ -33,7 +33,7 @@ const bloodRequest = async (
       "Donor's blood group is not matching with your request."
     )
   }
-  payload.userId = userInfo._id
+  payload.userId = userInfo.id
   const session = await mongoose.startSession()
 
   let result
@@ -133,12 +133,12 @@ const acceptRequest = async (
     throw new ApiError(httpStatus.BAD_REQUEST, 'There is info with this id!!!')
   }
 
-  const donor = await User.findById(userInfo._id)
+  const donor = await User.findById(userInfo.id)
   if (!donor) {
     throw new ApiError(httpStatus.CONFLICT, 'Your profile does not exist!!!')
   }
 
-  if (userInfo._id.toString() !== donationRequest.donnerId.toString()) {
+  if (userInfo.id.toString() !== donationRequest.donnerId.toString()) {
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
       'This request is not for you!!!'
@@ -193,14 +193,14 @@ const cancelRequest = async (
     throw new ApiError(httpStatus.BAD_REQUEST, 'There is info with this id!!!')
   }
 
-  const user = await User.findById(userInfo._id)
+  const user = await User.findById(userInfo.id)
   if (!user) {
     throw new ApiError(httpStatus.CONFLICT, 'Your profile does not exist!!!')
   }
 
   if (
-    userInfo._id.toString() !== donationRequest.donnerId.toString() &&
-    userInfo._id.toString() !== donationRequest.userId.toString()
+    userInfo.id.toString() !== donationRequest.donnerId.toString() &&
+    userInfo.id.toString() !== donationRequest.userId.toString()
   ) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'This is not for you!!!')
   }
