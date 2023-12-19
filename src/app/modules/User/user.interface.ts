@@ -37,3 +37,8 @@ export type UserModel = {
     savedPassword: string
   ): Promise<boolean>
 } & Model<IUser>
+
+export type ILoginUserResponse = {
+  accessToken: string
+  refreshToken: string
+}

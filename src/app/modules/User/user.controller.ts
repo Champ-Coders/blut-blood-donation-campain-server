@@ -14,7 +14,14 @@ import { UserInfoFromToken } from '../../../interfaces/common'
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const { ...userData } = req.body
 
-  const result = await UserService.createUser(userData)
+  const resultWithRefreshToken = await UserService.createUser(userData)
+  const { refreshToken, ...result } = resultWithRefreshToken
+  // set refresh token into cookies
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  }
+  res.cookie('refreshToken', refreshToken, cookieOptions)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -25,13 +32,20 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 })
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.loginUser(req.body)
+  const resultWithRefreshToken = await UserService.loginUser(req.body)
+  const { refreshToken, ...result } = resultWithRefreshToken
+  // set refresh token into cookies
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  }
+  res.cookie('refreshToken', refreshToken, cookieOptions)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User logged in successfully!',
-    data: { accessToken: result },
+    data: result,
   })
 })
 

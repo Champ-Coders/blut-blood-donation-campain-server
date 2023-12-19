@@ -5,7 +5,7 @@ import {
   ILoginUser,
   IRefreshTokenResponse,
 } from './user.constant'
-import { IUser } from './user.interface'
+import { ILoginUserResponse, IUser } from './user.interface'
 import { User } from './user.modal'
 import config from '../../../config'
 import { Secret } from 'jsonwebtoken'
@@ -14,7 +14,11 @@ import { UserInfoFromToken } from '../../../interfaces/common'
 
 const createUser = async (
   user: IUser
-): Promise<{ userInfo: IUser; accessToken: string } | null> => {
+): Promise<{
+  userInfo: IUser
+  accessToken: string
+  refreshToken: string
+}> => {
   const checkNumber = await User.findOne({ phoneNumber: user.phoneNumber })
   const checkEmail = await User.findOne({ email: user.email })
 
@@ -46,10 +50,17 @@ const createUser = async (
     config.jwt.jwt_secret as Secret,
     config.jwt.access_token_expires_in as string
   )
-  return { userInfo: result, accessToken }
+
+  const refreshToken = jwtHelpers.createToken(
+    tokenInfo,
+    config.jwt.refresh_token_secret as Secret,
+    config.jwt.refresh_token_expires_in as string
+  )
+
+  return { userInfo: result, accessToken, refreshToken }
 }
 
-const loginUser = async (payload: ILoginUser): Promise<string> => {
+const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
   const { email, password } = payload
 
   const isUserExist = await User.isUserExist(email)
@@ -68,8 +79,15 @@ const loginUser = async (payload: ILoginUser): Promise<string> => {
     config.jwt.jwt_secret as Secret,
     config.jwt.access_token_expires_in as string
   )
-
-  return accessToken
+  const refreshToken = jwtHelpers.createToken(
+    { id, email, role },
+    config.jwt.refresh_token_secret as Secret,
+    config.jwt.refresh_token_expires_in as string
+  )
+  return {
+    accessToken,
+    refreshToken,
+  }
 }
 
 const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
@@ -86,11 +104,11 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   const { email } = verifiedToken
 
   const isUserExist = await User.isUserExist(email)
+
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
   }
   //generate new token
-
   const newAccessToken = jwtHelpers.createToken(
     {
       id: isUserExist.id,

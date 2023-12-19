@@ -18,8 +18,6 @@ router.post(
   UserController.loginUser
 )
 
-router.post('/refresh-token', UserController.refreshToken)
-
 router.get('/profile', auth(), UserController.myProfile)
 
 router.patch(
