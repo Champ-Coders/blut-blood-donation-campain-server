@@ -5,12 +5,16 @@ import cors from 'cors'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import httpStatus from 'http-status'
 import router from './app/routes'
+import cookieParser from 'cookie-parser'
 
 const app: Application = express()
 const port = 5000
 
 //parse json
 app.use(express.json())
+
+app.use(cookieParser())
+
 //url encoded
 app.use(express.urlencoded({ extended: true }))
 
