@@ -4,6 +4,8 @@ import { BannerRoutes } from '../modules/banner/banner.routes'
 import { BlogRoutes } from '../modules/blog/blog.routes'
 import { FaqsRoutes } from '../modules/faqs/faqs.routes'
 
+import { DonationRoutes } from '../modules/Donor/donation.route'
+
 const router = express.Router()
 
 const moduleRoutes = [
@@ -22,6 +24,10 @@ const moduleRoutes = [
   {
     path: '/blog',
     route: BlogRoutes,
+  },
+  {
+    path: '/donation',
+    route: DonationRoutes,
   },
 ]
 
