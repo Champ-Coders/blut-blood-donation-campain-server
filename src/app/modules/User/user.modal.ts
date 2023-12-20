@@ -1,55 +1,95 @@
-import { Schema, model } from "mongoose";
-import { IUser, IUserExist, UserModel } from "./user.interface";
-import bcrypt from "bcrypt";
-import config from "../../../config";
+import { Schema, model } from 'mongoose'
+import { IUser, UserModel } from './user.interface'
+import bcrypt from 'bcrypt'
+import config from '../../../config'
+import { BloodGroups } from '../Donor/donation.constant'
+import { userRoles } from './user.constant'
 
 export const userSchema = new Schema<IUser, UserModel>({
   name: {
-    type: "string",
+    type: String,
     required: true,
   },
+  phoneNumber: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   email: {
-    type: "string",
+    type: String,
     required: true,
   },
   password: {
-    type: "string",
+    type: String,
     required: true,
-    select: 0,
+    select: false,
   },
-});
+  role: {
+    type: String,
+    required: true,
+    enum: userRoles,
+    default: 'user',
+  },
+  bloodGroup: {
+    type: String,
+    enum: BloodGroups,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  dateOfBirth: {
+    type: Date,
+    required: true,
+  },
+  totalDonation: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  lastDonation: {
+    type: Date,
+  },
+  totalReceived: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  available: {
+    type: Boolean,
+    default: true,
+  },
+  notification: {
+    type: Number,
+    required: true,
+    default: 0,
+    select: false,
+  },
+})
 
 userSchema.statics.isUserExist = async function (
   email: string
-): Promise<
-  Partial<Pick<IUserExist, "_id" | "password" | "name" | "email"> | null>
-> {
-  const user = await User.findOne(
+): Promise<Pick<IUser, 'id' | 'email' | 'password' | 'role'> | null> {
+  return await User.findOne(
     { email },
-    { email: 1, name: 1, password: 1 }
-  );
-
-  console.log("from login", user);
-  return user;
-};
+    { phoneNumber: 1, email: 1, password: 1, role: 1 }
+  )
+}
 
 userSchema.statics.isPasswordMatched = async function (
   givenPassword: string,
-  savedPassword: string
+  savePassword: string
 ): Promise<boolean> {
-  const isMatched = await bcrypt.compare(givenPassword, savedPassword);
-  console.log("pasword.....", isMatched);
+  return await bcrypt.compare(givenPassword, savePassword)
+}
 
-  return isMatched;
-};
-
-userSchema.pre("save", async function (next) {
-  ///hasing User Password
+userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(
     this.password,
     Number(config.bcrypt_salt_rounds)
-  );
-  next();
-});
+  )
+  next()
+})
 
-export const User = model<IUser, UserModel>("User", userSchema);
+export const User = model<IUser, UserModel>('User', userSchema)
