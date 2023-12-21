@@ -23,6 +23,14 @@ const donationSchema = new Schema<IDonation>(
       enum: BloodGroups,
       required: true,
     },
+    expectedDate: {
+      type: Date,
+      required: true,
+    },
+    bag: {
+      type: Number,
+      required: true,
+    },
     status: {
       type: String,
       enum: donationStatus,

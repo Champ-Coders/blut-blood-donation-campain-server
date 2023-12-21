@@ -11,8 +11,8 @@ export const BloodGroups: Group[] = [
   'O-',
 ]
 
-export type status = 'accept' | 'pending'
+export type status = 'accept' | 'pending' | 'canceled'
 
-export const donationStatus: status[] = ['accept', 'pending']
+export const donationStatus: status[] = ['accept', 'pending', 'canceled']
 
 export const donationFilterableField = ['searchTerm', 'status', 'bloodGroup']
