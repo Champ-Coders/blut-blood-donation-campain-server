@@ -12,7 +12,7 @@ const colonySchema = new Schema<IBlog, BlogModel>(
       required: true,
     },
     image: { type: String, required: true },
-    logo: { type: String, required: true },
+    logo: { type: String, required: false },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
