@@ -224,8 +224,11 @@ const cancelRequest = async (
         session,
       }
     )
-
-    result = await Donation.findByIdAndDelete(id, { session })
+    result = await Donation.findByIdAndUpdate(
+      id,
+      { $set: { status: 'canceled' } },
+      { new: true, session }
+    )
 
     await session.commitTransaction()
     await session.endSession()
