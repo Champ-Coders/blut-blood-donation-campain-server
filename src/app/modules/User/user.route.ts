@@ -40,10 +40,13 @@ router.post(
   UserController.refreshToken
 )
 
-// router.get('/all-user', UserController.getAllUsers)
+router.get('/all-users', UserController.getAllUsers)
 
-// router.get('/all-individual-group/:group', UserController.getIndividualGroupUsers)
+router.get(
+  '/all-individual-group/:group',
+  UserController.getIndividualGroupUsers
+)
 
-// router.get('/single-user/:id', UserController.getSingleUser)
+router.get('/single-user/:id', UserController.getSingleUser)
 
 export const userRoutes = router

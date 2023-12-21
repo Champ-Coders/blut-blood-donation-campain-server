@@ -4,13 +4,21 @@ import {
   IChangePassword,
   ILoginUser,
   IRefreshTokenResponse,
+  IUserFilters,
+  userFilterableField,
 } from './user.constant'
 import { ILoginUserResponse, IUser } from './user.interface'
 import { User } from './user.modal'
 import config from '../../../config'
 import { Secret } from 'jsonwebtoken'
 import { jwtHelpers } from '../../../helpers/jwtHelpers'
-import { UserInfoFromToken } from '../../../interfaces/common'
+import {
+  IGenericResponse,
+  IPaginationOptions,
+  UserInfoFromToken,
+} from '../../../interfaces/common'
+import { paginationHelpers } from '../../../helpers/paginationHelpers'
+import { SortOrder } from 'mongoose'
 
 const createUser = async (
   user: IUser
@@ -180,6 +188,127 @@ const changePassword = async (
   isUserExist.save()
 }
 
+const getAllUsers = async (
+  filters: IUserFilters,
+  paginationOptions: IPaginationOptions
+): Promise<IGenericResponse<IUser[]>> => {
+  const { searchTerm, ...filtersData } = filters
+
+  const andConditions = []
+
+  // for filter data
+  if (searchTerm) {
+    andConditions.push({
+      $or: userFilterableField.map(field => ({
+        [field]: { $regex: searchTerm, $options: 'i' },
+      })),
+    })
+  }
+
+  // for exact match user and condition
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    })
+  }
+
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions)
+
+  const sortConditions: { [key: string]: SortOrder } = {}
+
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder
+  }
+
+  // if no condition is given
+  const query = andConditions.length > 0 ? { $and: andConditions } : {}
+  const result = await User.find(query)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit)
+
+  const total = await User.countDocuments(query)
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  }
+}
+
+const getIndividualGroupUsers = async (
+  bloodGroup: string,
+  filters: IUserFilters,
+  paginationOptions: IPaginationOptions
+): Promise<IGenericResponse<IUser[]>> => {
+  const { searchTerm, ...filtersData } = filters
+
+  const andConditions = []
+  // for blood Group filter
+  andConditions.push({
+    $and: [{ bloodGroup: bloodGroup }],
+  })
+
+  // for filter data
+  if (searchTerm) {
+    andConditions.push({
+      $or: userFilterableField.map(field => ({
+        [field]: { $regex: searchTerm, $options: 'i' },
+      })),
+    })
+  }
+
+  // for exact match user and condition
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    })
+  }
+
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions)
+
+  const sortConditions: { [key: string]: SortOrder } = {}
+
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder
+  }
+
+  // if no condition is given
+  const query = andConditions.length > 0 ? { $and: andConditions } : {}
+  const result = await User.find(query)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit)
+
+  const total = await User.countDocuments(query)
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  }
+}
+
+const getSingleUser = async (id: string): Promise<IUser | null> => {
+  const result = await User.findById(id)
+  if (!result) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+  }
+  return result
+}
+
 export const UserService = {
   createUser,
   loginUser,
@@ -187,4 +316,7 @@ export const UserService = {
   myProfile,
   updateProfile,
   changePassword,
+  getAllUsers,
+  getIndividualGroupUsers,
+  getSingleUser,
 }

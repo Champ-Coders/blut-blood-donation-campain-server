@@ -5,6 +5,9 @@ import httpStatus from 'http-status'
 import { UserService } from './user.service'
 import config from '../../../config'
 import { UserInfoFromToken } from '../../../interfaces/common'
+import pick from '../../../shared/pick'
+import { userFilterableField } from './user.constant'
+import { paginationFields } from '../../../constants/pagination'
 // import { jwtHelpers } from '../../../helpers/jwtHelpers'
 // import { Secret } from 'jsonwebtoken'
 // import { userFilterableField } from './user.constant'
@@ -66,7 +69,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'user login successfully',
+    message: 'Access token get successfully',
     data: result,
   })
 })
@@ -111,53 +114,59 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-// const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-//   const filters = pick(req.query, userFilterableField)
-//   const paginationOptions = pick(req.query, paginationFields)
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, userFilterableField)
+  const paginationOptions = pick(req.query, paginationFields)
 
-//   const result = await UserService.getAllUsers(filters, paginationOptions)
+  const result = await UserService.getAllUsers(filters, paginationOptions)
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'All users retrieved Successfully!',
-//     data: result,
-//   })
-// })
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All users retrieved Successfully!',
+    data: result,
+  })
+})
 
-// const getIndividualGroupUsers = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const group = req.params.group
-//     const filters = pick(req.query, userFilterableField)
-//     const paginationOptions = pick(req.query, paginationFields)
+const getIndividualGroupUsers = catchAsync(
+  async (req: Request, res: Response) => {
+    const group = req.params.group
+    const letter = group.charAt(0)
+    let sign = group.slice(1)
+    sign == 'neg' ? (sign = '-') : (sign = '+')
+    const bloodGroup = letter + sign
 
-//     const result = await UserService.getIndividualGroupUsers(
-//       filters,
-//       paginationOptions,
-//       group
-//     )
+    const filters = pick(req.query, userFilterableField)
+    const paginationOptions = pick(req.query, paginationFields)
 
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: `All ${group}users retrieved Successfully!`,
-//       data: result,
-//     })
-//   }
-// )
+    const result = await UserService.getIndividualGroupUsers(
+      bloodGroup,
+      filters,
+      paginationOptions
+    )
 
-// const getSingleUser = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `All ${bloodGroup} users retrieved Successfully!`,
+      data: result,
+    })
+  }
+)
 
-//   const result = await UserService.getSingleUser(id)
+const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'User retrieved successfully!',
-//     data: result,
-//   })
-// })
+  const result = await UserService.getSingleUser(id)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully!',
+    data: result,
+  })
+})
+
 export const UserController = {
   createUser,
   loginUser,
@@ -165,7 +174,7 @@ export const UserController = {
   myProfile,
   updateProfile,
   changePassword,
-  // getAllUsers,
-  // getIndividualGroupUsers,
-  // getSingleUser,
+  getAllUsers,
+  getIndividualGroupUsers,
+  getSingleUser,
 }
