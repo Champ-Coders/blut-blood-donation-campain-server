@@ -7,12 +7,12 @@ const insertIntoDB = async (data: IBlog): Promise<IBlog> => {
 }
 
 const getAllData = async (): Promise<IBlog[]> => {
-  const result = await Blog.find({})
+  const result = await Blog.find({}).populate('user')
   return result
 }
 
 const getSingleData = async (id: string): Promise<IBlog | null> => {
-  const result = await Blog.findOne({ _id: id })
+  const result = await Blog.findOne({ _id: id }).populate('user')
   return result
 }
 
