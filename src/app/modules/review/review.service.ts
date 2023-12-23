@@ -7,12 +7,14 @@ const insertIntoDB = async (data: IReview): Promise<IReview> => {
 }
 
 const getAllData = async (): Promise<IReview[]> => {
-  const result = await Review.find({}).populate(['user', 'service'])
+  const result = await Review.find({}).populate('user').populate('service')
   return result
 }
 
 const getSingleData = async (id: string): Promise<IReview | null> => {
   const result = await Review.findOne({ _id: id })
+    .populate('user')
+    .populate('service')
   return result
 }
 

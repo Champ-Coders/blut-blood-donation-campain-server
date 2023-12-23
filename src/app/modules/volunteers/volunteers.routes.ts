@@ -15,10 +15,14 @@ router.patch(
   RequestValidation(VolunteersValidation.update),
   VolunteersController.updateData
 )
-router.delete('/:id', VolunteersController.deleteData)
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.ADMIN),
+  VolunteersController.deleteData
+)
 router.post(
   '/create-volunteer',
-  //   auth(ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.ADMIN),
   RequestValidation(VolunteersValidation.create),
   VolunteersController.insertIntoDB
 )

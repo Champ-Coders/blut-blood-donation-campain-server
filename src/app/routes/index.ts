@@ -36,6 +36,8 @@ const moduleRoutes = [
   {
     path: '/services',
     route: ServicesRoutes,
+  },
+  {
     path: '/event',
     route: EventRoutes,
   },
