@@ -9,4 +9,4 @@ router.patch('/:id', VolunteersController.updateData)
 router.delete('/:id', VolunteersController.deleteData)
 router.post('/create-volunteer', VolunteersController.insertIntoDB)
 
-export const FaqsRoutes = router
+export const VolunteersRoutes = router
