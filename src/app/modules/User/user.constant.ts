@@ -20,6 +20,11 @@ export const userFilterableField = [
   'bloodGroup',
   'address',
 ]
+
+export type IUserFilters = {
+  searchTerm?: string
+  bloodGroup?: string
+}
 export type Role = 'admin' | 'user'
 
 export const userRoles: Role[] = ['admin', 'user']
