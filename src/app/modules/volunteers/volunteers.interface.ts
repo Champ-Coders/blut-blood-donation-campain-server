@@ -1,6 +1,6 @@
 import { Model } from 'mongoose'
 
-export type ITeam = {
+export type IVolunteers = {
   name: string
   designation: string
   image: string
@@ -10,4 +10,4 @@ export type ITeam = {
   instagram: string
 }
 
-export type TeamModel = Model<ITeam, Record<string, unknown>>
+export type VolunteersModel = Model<IVolunteers, Record<string, unknown>>

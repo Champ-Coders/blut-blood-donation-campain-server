@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { ITeam, TeamModel } from './team.interface'
+import { IVolunteers, VolunteersModel } from './volunteers.interface'
 
-const colonySchema = new Schema<ITeam, TeamModel>(
+const colonySchema = new Schema<IVolunteers, VolunteersModel>(
   {
     name: {
       type: String,
@@ -40,4 +40,4 @@ const colonySchema = new Schema<ITeam, TeamModel>(
   }
 )
 
-export const Team = model('Team', colonySchema)
+export const Volunteers = model('Volunteers', colonySchema)
