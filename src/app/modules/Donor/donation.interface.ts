@@ -5,6 +5,8 @@ export type IDonation = {
   donnerId: Types.ObjectId
   userId: Types.ObjectId
   patientDetails: string
+  expectedDate: Date
+  bag: number
   bloodGroup: Group
   status: status
 }
