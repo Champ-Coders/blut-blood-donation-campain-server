@@ -15,6 +15,10 @@ const colonySchema = new Schema<IReview, ReviewModal>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    service: {
+      type: Schema.Types.ObjectId,
+      ref: 'Service',
+    },
   },
   {
     timestamps: true,
