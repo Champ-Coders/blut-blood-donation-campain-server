@@ -3,6 +3,7 @@ import { UserController } from './user.controller'
 import { RequestValidation } from '../../middleware/validateRequest'
 import { UserValidation } from './user.validation'
 import auth from '../../middleware/auth'
+import { ENUM_USER_ROLE } from '../../../enums/user'
 
 const router = express.Router()
 
@@ -48,5 +49,29 @@ router.get(
 )
 
 router.get('/single-user/:id', UserController.getSingleUser)
+
+router.post('/forget-password', UserController.forgetPassword)
+
+router.post('/reset-password/:id/:token', UserController.resetPassword)
+
+router.patch(
+  '/profile/:id',
+  auth(ENUM_USER_ROLE.ADMIN),
+  RequestValidation(UserValidation.updateUserZodSchema),
+  UserController.updateProfileByAdmin
+)
+
+router.patch(
+  '/change-role/:id',
+  // RequestValidation(UserValidation.changeRoleZodSchema),
+  auth(ENUM_USER_ROLE.ADMIN),
+  UserController.changeRole
+)
+
+router.delete(
+  '/profile/:id',
+  auth(ENUM_USER_ROLE.ADMIN),
+  UserController.deleteProfileByAdmin
+)
 
 export const userRoutes = router
