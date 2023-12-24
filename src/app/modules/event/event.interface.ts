@@ -7,7 +7,8 @@ export type IEvent = {
   image: string
   event_time: string
   event_date: Date
-  location: string
+  location: string;
+  is_popular?:true | false
 }
 
 export type EventModel = Model<IEvent, Record<string, unknown>>
