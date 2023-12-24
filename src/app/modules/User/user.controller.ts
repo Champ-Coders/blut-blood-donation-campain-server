@@ -105,6 +105,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const userInfo = req?.user
 
+// console.log(req.body,"...............");
   await UserService.changePassword(userInfo as UserInfoFromToken, req.body)
 
   sendResponse(res, {

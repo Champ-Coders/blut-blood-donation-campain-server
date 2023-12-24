@@ -7,14 +7,11 @@ import { ENUM_USER_ROLE } from '../../../enums/user'
 
 const router = express.Router()
 
-router
-  .route('/')
-  .get(EventController.getAllData)
-  .post(
-    auth(ENUM_USER_ROLE.ADMIN),
-    RequestValidation(EventValidation.create),
-    EventController.insertIntoDB
-  )
+router.route('/').get(EventController.getAllData).post(
+  auth(ENUM_USER_ROLE.ADMIN),
+  RequestValidation(EventValidation.create),
+  EventController.insertIntoDB
+)
 
 router
   .route('/:id')
