@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { BloodGroups } from '../Donor/donation.constant'
+import { userRoles } from './user.constant'
 
 const createUserZodSchema = z.object({
   body: z
@@ -80,6 +81,7 @@ const changePasswordZodSchema = z.object({
     })
     .strict(),
 })
+
 const refreshTokenZodSchema = z.object({
   cookies: z.object({
     refreshToken: z.string({
@@ -88,10 +90,21 @@ const refreshTokenZodSchema = z.object({
   }),
 })
 
+const changeRoleZodSchema = z.object({
+  body: z
+    .object({
+      role: z.enum([...userRoles] as [string, ...string[]], {
+        required_error: 'Role is required',
+      }),
+    })
+    .strict(),
+})
+
 export const UserValidation = {
   createUserZodSchema,
   loginUserZodSchema,
   updateUserZodSchema,
   changePasswordZodSchema,
   refreshTokenZodSchema,
+  changeRoleZodSchema,
 }
