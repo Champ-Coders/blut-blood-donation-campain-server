@@ -3,6 +3,7 @@ import { Group } from '../Donor/donation.constant'
 import { Role } from './user.constant'
 
 export type IUser = {
+  imgUrl: string
   id: string
   name: string
   email: string
@@ -10,7 +11,13 @@ export type IUser = {
   phoneNumber: string
   bloodGroup: Group
   dateOfBirth: Date
-  address: string
+  address: {
+    village: string
+    postOffice: string
+    thana: string
+    division: string
+    district: string
+  }
   role: Role
   totalDonation: number
   lastDonation?: Date

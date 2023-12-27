@@ -1,17 +1,13 @@
 import { Schema, model } from 'mongoose'
-import { EventModel, IEvent } from './event.interface'
+import { IVolunteers, VolunteersModel } from './volunteers.interface'
 
-const colonySchema = new Schema<IEvent, EventModel>(
+const colonySchema = new Schema<IVolunteers, VolunteersModel>(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    banner: {
+    designation: {
       type: String,
       required: true,
     },
@@ -19,22 +15,21 @@ const colonySchema = new Schema<IEvent, EventModel>(
       type: String,
       required: true,
     },
-
-    event_time: {
+    linkedin: {
       type: String,
       required: true,
     },
-    event_date: {
-      type: Date,
-      required: true,
-    },
-    location: {
+    facebook: {
       type: String,
       required: true,
     },
-    is_popular: {
-      type: Boolean,
-      default: false,
+    github: {
+      type: String,
+      required: true,
+    },
+    instagram: {
+      type: String,
+      required: true,
     },
   },
   {
@@ -45,4 +40,4 @@ const colonySchema = new Schema<IEvent, EventModel>(
   }
 )
 
-export const Event = model('Event', colonySchema)
+export const Volunteers = model('Volunteers', colonySchema)

@@ -309,6 +309,92 @@ const getSingleUser = async (id: string): Promise<IUser | null> => {
   return result
 }
 
+const forgetPassword = async (email: string): Promise<string> => {
+  const user = await User.findOne({ email: email })
+  if (!user) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+  }
+  const tokenInfo = {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  }
+  const token = jwtHelpers.createToken(
+    tokenInfo,
+    config.jwt.jwt_secret as Secret,
+    '5m'
+  )
+  const link = `http://localhost:5000/api/v1/users/reset-password/${user.id}/${token}`
+  console.log(link)
+  return link
+}
+
+const resetPassword = async (id: string, token: string): Promise<string> => {
+  const user = await User.findById(id)
+  if (!user) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+  }
+  jwtHelpers.verifyToken(token, config.jwt.jwt_secret as Secret)
+  // need to work
+  return 'link'
+}
+
+const changeRole = async (id: string): Promise<IUser | null> => {
+  const user = await User.findById(id)
+  if (!user) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+  }
+  const role = user.role
+  let changingRole
+  if (role == 'admin') {
+    changingRole = 'user'
+  } else changingRole = 'admin'
+  const result = await User.findByIdAndUpdate(
+    { _id: id },
+    { role: changingRole },
+    { new: true }
+  )
+  if (!result) {
+    throw new ApiError(httpStatus.CONFLICT, 'Something went wrong!!!')
+  }
+  return result
+}
+
+const updateProfileByAdmin = async (
+  payload: Partial<IUser>,
+  id: string
+): Promise<IUser | null> => {
+  const isUserExist = await User.findById(id)
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
+  }
+
+  if (payload.phoneNumber) {
+    const checkNumber = await User.findOne({
+      phoneNumber: payload.phoneNumber,
+    })
+
+    if (checkNumber) {
+      throw new ApiError(httpStatus.CONFLICT, 'Already used this number!!!')
+    }
+  }
+
+  const result = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  })
+  return result
+}
+
+const deleteProfileByAdmin = async (id: string): Promise<IUser | null> => {
+  const isUserExist = await User.findById(id)
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
+  }
+
+  const result = await User.findByIdAndDelete(id)
+  return result
+}
+
 export const UserService = {
   createUser,
   loginUser,
@@ -319,4 +405,9 @@ export const UserService = {
   getAllUsers,
   getIndividualGroupUsers,
   getSingleUser,
+  forgetPassword,
+  changeRole,
+  updateProfileByAdmin,
+  deleteProfileByAdmin,
+  resetPassword,
 }
