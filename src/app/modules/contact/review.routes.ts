@@ -1,5 +1,5 @@
 import express from 'express'
-import { ReviewController } from './review.controller'
+import { ReviewController } from './contact.controller'
 import { RequestValidation } from '../../middleware/validateRequest'
 import { ReviewValidation } from './review.validation'
 import auth from '../../middleware/auth'
