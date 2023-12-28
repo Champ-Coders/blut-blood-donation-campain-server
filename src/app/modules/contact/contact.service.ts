@@ -8,7 +8,7 @@ const insertIntoDB = async (data: IContact): Promise<IContact> => {
 }
 
 const getAllData = async (): Promise<IContact[]> => {
-  const result = await Contact.find({}).populate('user').populate('service')
+  const result = await Contact.find({}).populate('user')
   return result
 }
 

@@ -10,6 +10,7 @@ import { EventRoutes } from '../modules/event/event.routes'
 import { ReviewRoutes } from '../modules/review/review.routes'
 import { VolunteersRoutes } from '../modules/volunteers/volunteers.routes'
 import { ReceiveRoutes } from '../modules/receive/receive.route'
+import { ContactRoutes } from '../modules/contact/contact.routes'
 
 const router = express.Router()
 
@@ -53,6 +54,10 @@ const moduleRoutes = [
   {
     path: '/receive',
     route: ReceiveRoutes,
+  },
+  {
+    path: '/contact',
+    route: ContactRoutes,
   },
 ]
 
