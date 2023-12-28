@@ -1,4 +1,4 @@
-import { Model, ObjectId } from 'mongoose'
+import { Model} from 'mongoose'
 
 type IName = {
   first_name: string
@@ -8,7 +8,7 @@ type IName = {
 export type IContact = {
   email: string
   name: IName
-  user: ObjectId
+
   message: string
   subject: string
 }
