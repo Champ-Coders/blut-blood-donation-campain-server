@@ -1,24 +1,26 @@
 import express from 'express'
-import { ReviewController } from './contact.controller'
+
 import { RequestValidation } from '../../middleware/validateRequest'
-import { ReviewValidation } from './contact.validation'
+
 import auth from '../../middleware/auth'
 import { ENUM_USER_ROLE } from '../../../enums/user'
+import { ContactController } from './contact.controller'
+import { ContactValidation } from './contact.validation'
 
 const router = express.Router()
 
-router.get('/', ReviewController.getAllData)
-router.get('/:id', ReviewController.getSingleData)
+router.get('/', ContactController.getAllData)
+router.get('/:id', ContactController.getSingleData)
 router.patch(
   '/:id',
-  RequestValidation(ReviewValidation.update),
-  ReviewController.updateData
+  RequestValidation(ContactValidation.update),
+  ContactController.updateData
 )
-router.delete('/:id', auth(ENUM_USER_ROLE.ADMIN), ReviewController.deleteData)
+router.delete('/:id', auth(ENUM_USER_ROLE.ADMIN), ContactController.deleteData)
 router.post(
-  '/create-review',
-  RequestValidation(ReviewValidation.create),
-  ReviewController.insertIntoDB
+  '/create-Contact',
+  RequestValidation(ContactValidation.create),
+  ContactController.insertIntoDB
 )
 
-export const ReviewRoutes = router
+export const ContactRoutes = router
