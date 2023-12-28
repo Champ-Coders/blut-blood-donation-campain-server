@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
-import { ReviewService } from './review.service'
+import { ReviewService } from './contact.service'
 import { IReview } from './contact.interface'
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
