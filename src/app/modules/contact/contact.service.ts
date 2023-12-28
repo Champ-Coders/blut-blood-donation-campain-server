@@ -1,14 +1,15 @@
-import { IContact } from "./contact.interface"
-import { Contact } from "./contact.model"
-
+import { IContact } from './contact.interface'
+import { Contact } from './contact.model'
+import { sendMailer } from './sendMail'
 
 const insertIntoDB = async (data: IContact): Promise<IContact> => {
 
-  
 
-  const result = await Contact.create(data)
+  // const sendMail = await sendMailer()
 
-  return result
+  // const result = await Contact.create(data)
+
+  // return result
 }
 
 const getAllData = async (): Promise<IContact[]> => {

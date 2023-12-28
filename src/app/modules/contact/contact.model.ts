@@ -26,10 +26,7 @@ const contactSchema = new Schema<IContact, ContactModel>(
       type: String,
       required: true,
     },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
+  
   },
   {
     timestamps: true,
