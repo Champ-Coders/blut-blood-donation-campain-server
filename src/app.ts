@@ -18,7 +18,15 @@ app.use(cookieParser())
 //url encoded
 app.use(express.urlencoded({ extended: true }))
 
-app.use(cors())
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'https://redirect-blood-donation-campain-server.vercel.app',
+    ],
+    credentials: true,
+  })
+)
 
 //application  route
 // Application Routes
