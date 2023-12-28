@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://redirect-blood-donation-campain-server.vercel.app',
+      'https://blut-blood-donation-compaign.vercel.app',
     ],
     credentials: true,
   })
