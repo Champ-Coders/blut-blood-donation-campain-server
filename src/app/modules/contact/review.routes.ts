@@ -1,7 +1,7 @@
 import express from 'express'
 import { ReviewController } from './contact.controller'
 import { RequestValidation } from '../../middleware/validateRequest'
-import { ReviewValidation } from './review.validation'
+import { ReviewValidation } from './contact.validation'
 import auth from '../../middleware/auth'
 import { ENUM_USER_ROLE } from '../../../enums/user'
 
