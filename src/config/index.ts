@@ -18,4 +18,8 @@ export default {
     refresh_token_secret: process.env.JWT_REFRESH_SECRET,
     refresh_token_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
   },
+  nodeMailer: {
+    FromEmail: process.env.FromEmail,
+    appPassword: process.env.appPassword,
+  },
 }
