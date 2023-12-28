@@ -9,10 +9,13 @@ import { IContact } from './contact.interface'
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   const data = req.body
   const result = await ContactService.insertIntoDB(data)
+  console.log("🚀 ~ file: contact.controller.ts:12 ~ insertIntoDB ~ result:", result)
+
+
   sendResponse<IContact>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Contact Create Successfully!',
+    message: 'Contact Sent Successfully!',
     data: result,
   })
 })
