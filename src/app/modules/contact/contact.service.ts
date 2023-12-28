@@ -3,7 +3,11 @@ import { Contact } from "./contact.model"
 
 
 const insertIntoDB = async (data: IContact): Promise<IContact> => {
+
+  
+
   const result = await Contact.create(data)
+
   return result
 }
 
