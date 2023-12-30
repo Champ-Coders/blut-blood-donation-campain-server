@@ -10,6 +10,7 @@ const request = async (
   userInfo: UserInfoFromToken
 ): Promise<IBloodReceive | null> => {
   const user = await User.findById(userInfo?.id)
+
   if (!user) {
     throw new ApiError(httpStatus.CONFLICT, 'Your profile does not exist!!!')
   }
@@ -18,6 +19,17 @@ const request = async (
   return result
 }
 
+const getAllDataDB = async (userInfo: any): Promise<IBloodReceive[]> => {
+  console.log(
+    '🚀 ~ file: receive.service.ts:23 ~ getAllDataDB ~ userInfo:',
+    userInfo
+  )
+
+  const result = await BloodReceive.find({ userId: userInfo.id })
+  return result
+}
+
 export const ReceiveService = {
   request,
+  getAllDataDB,
 }
