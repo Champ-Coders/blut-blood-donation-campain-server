@@ -6,7 +6,15 @@ import 'colors'
 
 const server = http.createServer(app)
 // Create HTTP server and attach Express app to it
-const io: SocketIoServer = new SocketIoServer(server)
+const io: SocketIoServer = new SocketIoServer(server, {
+  cors: {
+    origin: [
+      'http://localhost:3000',
+      'https://blut-blood-donation-compaign.vercel.app',
+    ],
+    methods: ['GET', 'POST'],
+  },
+})
 
 io.on('connection', (socket: Socket) => {
   console.log('socket user connected')
