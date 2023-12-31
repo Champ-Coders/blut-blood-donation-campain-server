@@ -10,6 +10,7 @@ const io: SocketIoServer = new SocketIoServer(server)
 
 io.on('connection', (socket: Socket) => {
   console.log('socket user connected')
+
   socket.on('disconnect', () => {
     console.log('user disconnected')
   })
