@@ -6,11 +6,11 @@ const notificationSchema = new Schema<INotification, NotificationModel>(
   {
     notificationBody: {
       type: String,
-      required: true,
+      optional: true,
     },
     notificationTitle: {
       type: String,
-      required: true,
+      optional: true,
     },
     user: {
       type: Schema.Types.ObjectId,
