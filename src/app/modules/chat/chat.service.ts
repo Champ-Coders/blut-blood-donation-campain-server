@@ -3,7 +3,7 @@ import ApiError from '../../../errors/ApiErrors'
 import { User } from '../User/user.modal'
 import { Chat } from './chat.model'
 
-const chat_message = async (payload: any) => {
+const createmessage = async (payload: any) => {
   console.log('🚀 ~ file: chat.service.ts:2 ~ payload:', payload)
   const checkEmail = await User.findOne({ email: payload.email })
   // console.log(
@@ -55,14 +55,29 @@ const chat_message = async (payload: any) => {
   return createMessage
 }
 
-const getAllMessage = async (userEmail: any) => {
-  console.log(
-    '🚀 ~ file: chat.service.ts:59 ~ getAllMessage ~ userEmail:',
-    userEmail
-  );
-  
-  const getAllMessage = await Chat.find({})
+const getAllMessagedUser = () => {
+  const allUser = await User.find({ isChat: true })
+
+  return allUser
+}
+
+const getSIngleUserMessage = async (
+  senderEmail: string,
+  receiverEmail: string
+) => {
+  console.log(senderEmail, receiverEmail)
+
+  const getAllMessage = await Chat.find({
+    $or: [
+      { senderEmail, receiverEmail },
+      { senderEmail: senderEmail, receiverEmail: receiverEmail },
+    ],
+  })
   return getAllMessage
 }
 
-export const chatService = { chat_message, getAllMessage }
+export const chatService = {
+  createmessage,
+  getSIngleUserMessage,
+  getAllMessagedUser,
+}
