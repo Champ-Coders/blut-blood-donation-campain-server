@@ -1,7 +1,68 @@
-const chat_message = (data: any) => {
-  console.log('🚀 ~ file: chat.service.ts:2 ~ data:', data)
+import httpStatus from 'http-status'
+import ApiError from '../../../errors/ApiErrors'
+import { User } from '../User/user.modal'
+import { Chat } from './chat.model'
 
-  console.log(data)
+const chat_message = async (payload: any) => {
+  console.log('🚀 ~ file: chat.service.ts:2 ~ payload:', payload)
+  const checkEmail = await User.findOne({ email: payload.email })
+  // console.log(
+  //   '🚀 ~ file: chat.service.ts:8 ~ constchat_message= ~ checkEmail:',
+  //   checkEmail
+  // )
+
+  if (!checkEmail) {
+    throw new ApiError(httpStatus.CONFLICT, 'Could not find the user!!!')
+  } else {
+    payload.role = checkEmail.role
+  }
+
+  const updateUserIsChat = await User.findOneAndUpdate(
+    { _id: checkEmail?._id },
+    {
+      isChat: true,
+    },
+    {
+      new: true,
+    }
+  )
+
+  // console.log(
+  //   '🚀 ~ file: chat.service.ts:25 ~ constchat_message= ~ updateUserIsChat:',
+  //   updateUserIsChat
+  // )
+
+  const createMessageData = {
+    message: payload?.message,
+    img:
+      payload?.img ||
+      'https://img.freepik.com/free-photo/confident-attractive-caucasian-guy-beige-pullon-smiling-broadly-while-standing-against-gray_176420-44508.jpg?w=1380&t=st=1704185130~exp=1704185730~hmac=59e603b1b189517200baee240e19841cac32cac33e3b18bf388d3af232517699',
+    senderEmail: updateUserIsChat?.email,
+    receiverEmail: 'sarwarasikadmin@gmail.com',
+  }
+
+  console.log(
+    '🚀 ~ file: chat.service.ts:41 ~ constchat_message= ~ createMessageData:',
+    createMessageData
+  )
+
+  const createMessage = await Chat.create(createMessageData)
+  console.log(
+    '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
+    createMessage
+  )
+
+  return createMessage
 }
 
-export const chatService = { chat_message }
+const getAllMessage = async (userEmail: any) => {
+  console.log(
+    '🚀 ~ file: chat.service.ts:59 ~ getAllMessage ~ userEmail:',
+    userEmail
+  );
+  
+  const getAllMessage = await Chat.find({})
+  return getAllMessage
+}
+
+export const chatService = { chat_message, getAllMessage }

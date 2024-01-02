@@ -66,9 +66,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
       },
     ],
   })
+
   next()
 })
-
 
 io.on('connection', (socket: Socket) => {
   console.log('socket user connected')
@@ -79,9 +79,17 @@ io.on('connection', (socket: Socket) => {
   // Now, you can use the 'user' object as needed
   console.log('User:', user)
 
+  ///! for create message used socket.emit("send-message",data) in frontend
   socket.on('send-message', data => {
-    console.log(data)
+    // console.log(data)
     chatService.chat_message(data)
+
+    // ! for sent message to frontend;
+
+    const allMessage = chatService.getMessage(user?.email)
+    console.log('🚀 ~ file: app.ts:90 ~ io.on ~ allMessage:', allMessage)
+
+    io.emit('allMessage', allMessage)
   })
 
   socket.on('disconnect', () => {
@@ -93,4 +101,4 @@ io.on('connection', (socket: Socket) => {
 //   console.log(`Server is running on port ${port}`);
 // });
 
-export { app, port ,server}
+export { app, port, server, io }
