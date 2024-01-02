@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { ChatModel, IChat } from './chat.interface'
 
-const colonySchema = new Schema<IChat, ChatModel>(
+const chatSchema = new Schema<IChat, ChatModel>(
   {
     message: {
       type: String,
@@ -16,14 +16,19 @@ const colonySchema = new Schema<IChat, ChatModel>(
       default: 'text',
       required: true,
     },
-    sender: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+    senderEmail: {
+      type: String,
+      required: true,
     },
-    receiver: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+    receiverEmail: {
+      type: String,
+      required: true,
     },
+    // type:{
+    //   type:String,
+    //   default:true,
+
+    // }
   },
   {
     timestamps: true,
@@ -33,4 +38,4 @@ const colonySchema = new Schema<IChat, ChatModel>(
   }
 )
 
-export const Chat = model('Chat', colonySchema)
+export const Chat = model('Chat', chatSchema)
