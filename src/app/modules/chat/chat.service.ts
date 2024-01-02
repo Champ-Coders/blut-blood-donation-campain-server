@@ -26,12 +26,6 @@ const createmessage = async (payload: any) => {
       new: true,
     }
   )
-
-  // console.log(
-  //   '🚀 ~ file: chat.service.ts:25 ~ constchat_message= ~ updateUserIsChat:',
-  //   updateUserIsChat
-  // )
-
   const createMessageData = {
     message: payload?.message,
     img:
@@ -41,10 +35,6 @@ const createmessage = async (payload: any) => {
     receiverEmail: 'sarwarasikadmin@gmail.com',
   }
 
-  console.log(
-    '🚀 ~ file: chat.service.ts:41 ~ constchat_message= ~ createMessageData:',
-    createMessageData
-  )
 
   const createMessage = await Chat.create(createMessageData)
   console.log(
@@ -55,9 +45,8 @@ const createmessage = async (payload: any) => {
   return createMessage
 }
 
-const getAllMessagedUser = () => {
+const getAllMessagedUser = async () => {
   const allUser = await User.find({ isChat: true })
-
   return allUser
 }
 

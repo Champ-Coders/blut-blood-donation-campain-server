@@ -83,14 +83,22 @@ io.on('connection', (socket: Socket) => {
   socket.on('send-message', data => {
     // console.log(data)
     chatService.createmessage(data)
+    io.emit('new-message', data)
 
     // ! for sent message to frontend;
-
-    const allMessage = chatService.getMessage(user?.email)
-    console.log('🚀 ~ file: app.ts:90 ~ io.on ~ allMessage:', allMessage)
-
-    io.emit('allMessage', allMessage)
   })
+
+  // Get all users and send to the connected user
+  socket.on('get-all-users', async () => {
+    const allUsers = chatService.getAllMessagedUser();
+    socket.emit('all-users', allUsers);
+  });
+
+    // Get messages for a single user and send to the connected user
+    socket.on('get-single-user-messages', async ({ senderEmail, receiverEmail }) => {
+      const messages = await chatService.getSIngleUserMessage(senderEmail, receiverEmail);
+      socket.emit('single-user-messages', messages);
+    });
 
   socket.on('disconnect', () => {
     console.log('user disconnected')
