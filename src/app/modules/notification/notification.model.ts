@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { INotification, NotificationModel } from './chat.interface'
+import { INotification, NotificationModel } from './notification.interface'
  
 
 const notificationSchema = new Schema<INotification, NotificationModel>(
