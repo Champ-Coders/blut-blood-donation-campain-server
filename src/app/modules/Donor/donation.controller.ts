@@ -1,19 +1,22 @@
-import { Request, Response, RequestHandler } from 'express'
-import catchAsync from '../../../shared/catchAsync'
-import sendResponse from '../../../shared/sendResponse'
+import { Request, RequestHandler, Response } from 'express'
 import httpStatus from 'http-status'
-import pick from '../../../shared/pick'
-import { DonationService } from './donation.service'
-import { UserInfoFromToken } from '../../../interfaces/common'
 import { paginationFields } from '../../../constants/pagination'
+import { UserInfoFromToken } from '../../../interfaces/common'
+import catchAsync from '../../../shared/catchAsync'
+import pick from '../../../shared/pick'
+import sendResponse from '../../../shared/sendResponse'
 import { donationFilterableField } from './donation.constant'
+import { DonationService } from './donation.service'
 
 const bloodRequest: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
+    console.log(req.body, req.user, 'faysal')
+
     const result = await DonationService.bloodRequest(
       req.body,
       req.user as UserInfoFromToken
     )
+
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
