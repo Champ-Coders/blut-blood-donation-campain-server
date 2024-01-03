@@ -24,11 +24,11 @@ const chatSchema = new Schema<IChat, ChatModel>(
       type: String,
       required: true,
     },
-    // type:{
-    //   type:String,
-    //   default:true,
-
-    // }
+    types: {
+      type: String,
+      default: 'comment',
+      required: true,
+    },
   },
   {
     timestamps: true,

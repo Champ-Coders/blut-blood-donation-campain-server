@@ -6,11 +6,39 @@ import { ENUM_USER_ROLE } from '../../../enums/user'
 // import { UserService } from '../User/user.service'
 
 const createmessage = async (payload: any) => {
-  console.log('🚀 ~ file: chat.service.ts:2 ~ payload:', payload)
+  // console.log('🚀 ~ file: chat.service.ts:2 ~ payload:', payload)
 
   const checkEmail = await User.findOne({ email: payload.email })
 
-  
+  // console.log(
+  //   '🚀 ~ file: chat.service.ts:8 ~ constchat_message= ~ checkEmail:',
+  //   checkEmail
+  // )
+
+  if (payload?.type === 'reply') {
+    const isUserById = await User.findById(payload?._id)
+
+    // console.log(
+    //   '🚀 ~ file: chat.service.ts:20 ~ createmessage ~ isUserById:',
+    //   isUserById
+    // )
+
+    const createMessage = await Chat.create({
+      message: payload?.message,
+      img:
+        payload?.img ||
+        'https://img.freepik.com/free-photo/confident-attractive-caucasian-guy-beige-pullon-smiling-broadly-while-standing-against-gray_176420-44508.jpg?w=1380&t=st=1704185130~exp=1704185730~hmac=59e603b1b189517200baee240e19841cac32cac33e3b18bf388d3af232517699',
+      senderEmail: isUserById?.email,
+      receiverEmail: 'admin@admin.com',
+      types: 'reply',
+    })
+    // console.log(
+    //   '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
+    //   createMessage
+    // )
+
+    return createMessage
+  }
 
   if (!checkEmail) {
     throw new ApiError(httpStatus.CONFLICT, 'Could not find the user!!!')
@@ -35,16 +63,16 @@ const createmessage = async (payload: any) => {
     senderEmail: updateUserIsChat?.email,
     receiverEmail: 'admin@admin.com',
   }
-  console.log(
-    '🚀 ~ file: chat.service.ts:37 ~ createmessage ~ createMessageData:',
-    createMessageData
-  )
+  // console.log(
+  //   '🚀 ~ file: chat.service.ts:37 ~ createmessage ~ createMessageData:',
+  //   createMessageData
+  // )
 
   const createMessage = await Chat.create(createMessageData)
-  console.log(
-    '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
-    createMessage
-  )
+  // console.log(
+  //   '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
+  //   createMessage
+  // )
 
   return createMessage
 }
@@ -105,29 +133,33 @@ const getSIngleUserMessage = async (
   senderEmail: string,
   receiverEmail: string
 ) => {
-  console.log(senderEmail, receiverEmail)
-
-  // const senderData = await User.findById(senderEmail)
-  // console.log('🚀 ~ file: chat.service.ts:65 ~ senderData:', senderData)
-
+  // console.log(senderEmail, receiverEmail)
   const getAllMessage = await Chat.find({
     $or: [
       { senderEmail: senderEmail, receiverEmail },
       { senderEmail: senderEmail, receiverEmail: receiverEmail },
     ],
-  }).sort({ updatedAt: 'desc' })
+  })
+  // .sort({ updatedAt: 'desc' })
   return getAllMessage
 }
 
-const getAdminMessage = async (senderEmail: string, receiverEmail: string) => {
-  console.log(senderEmail, receiverEmail)
+const getAdminMessage = async (senderId: string, receiverEmail: string) => {
+  // console.log(senderId, receiverEmail)
+
+  const senderData = await User.findById(senderId)
+  // console.log('🚀 ~ file: chat.service.ts:65 ~ senderData:', senderData)
 
   const getAllMessage = await Chat.find({
     $or: [
-      { senderEmail, receiverEmail },
-      { senderEmail: senderEmail, receiverEmail: receiverEmail },
+      { senderEmail: senderData?.email, receiverEmail },
+      { senderEmail: senderData?.email, receiverEmail: receiverEmail },
     ],
   })
+  // .sort({ updatedAt: 'desc' })
+  // console.log("🚀 ~ file: chat.service.ts:161 ~ getAdminMessage ~ getAllMessage:", getAllMessage)
+
+  
   return getAllMessage
 }
 

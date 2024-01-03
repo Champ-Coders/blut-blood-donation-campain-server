@@ -8,7 +8,7 @@ export type IChat = {
   img?: string
   is_deleted?: true
   //   reply: string
-  //   types: 'message' | 'reply'
+    types: 'comment' | 'reply'
 }
 
 export type ChatModel = Model<IChat, Record<string, unknown>>
