@@ -19,7 +19,7 @@ const getAllData = async (): Promise<IBlog[]> => {
         select: ['_id', 'name', 'email', 'imgUrl'],
       },
       // remove blogId from comments
-      select: ['_id', 'comment', 'userId', 'createdAt', 'updatedAt', 'replay'],
+      select: ['_id', 'comments', 'userId', 'createdAt', 'updatedAt', 'replay'],
     })
   return result
 }
@@ -37,7 +37,7 @@ const getSingleData = async (id: string): Promise<IBlog | null> => {
         select: ['_id', 'name', 'email', 'imgUrl'],
       },
       // remove blogId from comments
-      select: ['_id', 'comment', 'userId', 'createdAt', 'updatedAt', 'replay'],
+      select: ['_id', 'comments', 'userId', 'createdAt', 'updatedAt', 'replay'],
     })
   return result
 }
