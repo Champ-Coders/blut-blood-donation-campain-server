@@ -1,9 +1,15 @@
+import { Blog } from '../blog/blog.model'
 import { IBlogComment } from './blogComment.interface'
 import { BlogComment } from './blogComment.model'
 
 const insertIntoDB = async (data: IBlogComment): Promise<IBlogComment> => {
   const result = await BlogComment.create(data)
 
+  await Blog.findOneAndUpdate(
+    { _id: data.blogId },
+    { $push: { comments: result._id } },
+    { new: true }
+  )
   return result
 }
 
@@ -41,6 +47,13 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IBlogComment | null> => {
+  // remove comment from Blog
+  await Blog.findOneAndUpdate(
+    { comments: id },
+    { $pull: { comments: id } },
+    { new: true }
+  )
+
   const result = await BlogComment.findOneAndDelete({ _id: id })
   return result
 }

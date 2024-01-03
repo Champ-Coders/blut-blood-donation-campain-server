@@ -7,12 +7,32 @@ const insertIntoDB = async (data: IBlog): Promise<IBlog> => {
 }
 
 const getAllData = async (): Promise<IBlog[]> => {
-  const result = await Blog.find({}).populate('user')
+  const result = await Blog.find({})
+    .populate('user')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'userId',
+        select: ['_id', 'name', 'email', 'imgUrl'],
+      },
+      // remove blogId from comments
+      select: ['_id', 'comment', 'userId', 'createdAt', 'updatedAt', 'replay'],
+    })
   return result
 }
 
 const getSingleData = async (id: string): Promise<IBlog | null> => {
-  const result = await Blog.findOne({ _id: id }).populate('user')
+  const result = await Blog.findOne({ _id: id })
+    .populate('user')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'userId',
+        select: ['_id', 'name', 'email', 'imgUrl'],
+      },
+      // remove blogId from comments
+      select: ['_id', 'comment', 'userId', 'createdAt', 'updatedAt', 'replay'],
+    })
   return result
 }
 

@@ -17,6 +17,12 @@ const colonySchema = new Schema<IBlog, BlogModel>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'BlogComment',
+      },
+    ],
   },
   {
     timestamps: true,
