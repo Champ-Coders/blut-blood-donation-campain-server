@@ -9,8 +9,10 @@ import { ServicesRoutes } from '../modules/services/services.routes'
 import { EventRoutes } from '../modules/event/event.routes'
 import { ReviewRoutes } from '../modules/review/review.routes'
 import { VolunteersRoutes } from '../modules/volunteers/volunteers.routes'
+import { BlogCommentRoutes } from '../modules/blogComment/blogComment.routes'
 import { ReceiveRoutes } from '../modules/receive/receive.route'
 import { ContactRoutes } from '../modules/contact/contact.routes'
+import { ChatRoutes } from '../modules/chat/chat.route'
 
 const router = express.Router()
 
@@ -51,13 +53,20 @@ const moduleRoutes = [
     path: '/volunteer',
     route: VolunteersRoutes,
   },
-  {
+  { blogApi_hasanrifat
+    path: '/blog-comment',
+    route: BlogCommentRoutes,
+  },
     path: '/receive',
     route: ReceiveRoutes,
   },
   {
     path: '/contact',
     route: ContactRoutes,
+  },
+  {
+    path: '/chat',
+    route: ChatRoutes,
   },
 ]
 

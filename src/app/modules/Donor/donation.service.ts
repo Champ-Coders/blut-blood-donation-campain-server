@@ -95,7 +95,6 @@ const getAllDonationInfo = async (
 
   // if no condition is given
   const query = andConditions.length > 0 ? { $and: andConditions } : {}
-
   const result = await Donation.find(query)
     .sort(sortConditions)
     .skip(skip)

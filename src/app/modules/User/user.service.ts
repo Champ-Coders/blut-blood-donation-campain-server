@@ -151,15 +151,15 @@ const updateProfile = async (
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
   }
 
-  if (payload.phoneNumber) {
-    const checkNumber = await User.findOne({
-      phoneNumber: payload.phoneNumber,
-    })
+  // if (payload.phoneNumber) {
+  //   const checkNumber = await User.findOne({
+  //     phoneNumber: payload.phoneNumber,
+  //   })
 
-    if (checkNumber) {
-      throw new ApiError(httpStatus.CONFLICT, 'Already used this number!!!')
-    }
-  }
+  //   if (checkNumber) {
+  //     throw new ApiError(httpStatus.CONFLICT, 'Already used this number!!!')
+  //   }
+  // }
 
   const result = await User.findOneAndUpdate({ _id: userInfo.id }, payload, {
     new: true,

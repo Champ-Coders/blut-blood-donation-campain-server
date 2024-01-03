@@ -88,6 +88,10 @@ export const userSchema = new Schema<IUser, UserModel>({
     default: 0,
     select: false,
   },
+  isChat: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 userSchema.statics.isUserExist = async function (
