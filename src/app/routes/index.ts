@@ -53,10 +53,11 @@ const moduleRoutes = [
     path: '/volunteer',
     route: VolunteersRoutes,
   },
-  { blogApi_hasanrifat
+  {
     path: '/blog-comment',
     route: BlogCommentRoutes,
   },
+  {
     path: '/receive',
     route: ReceiveRoutes,
   },
