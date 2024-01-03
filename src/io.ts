@@ -1,36 +1,25 @@
-// import { Server as SocketIoServer, Socket } from 'socket.io'
-// import http from 'http'
+// import { Socket } from 'socket.io'
+// import { io } from './app'
 
-// import { app } from './app'
-// import 'colors'
-// import { chatService } from './app/modules/chat/chat.service'
+// function IO() {
+//   io.on('connection', (socket: Socket) => {
+//     console.log('socket user connected')
 
-// const server = http.createServer(app)
-// // Create HTTP server and attach Express app to it
-// const io: SocketIoServer = new SocketIoServer(server, {
-//   cors: {
-//     origin: [
-//       'http://localhost:3000',
-//       //   'https://blut-blood-donation-compaign.vercel.app',
-//     ],
-//     methods: ['GET', 'POST'],
-//   },
-// })
+//     const userString = socket.handshake.query.user as string
+//     const user = JSON.parse(userString)
 
-// io.on('connection', (socket: Socket) => {
-//   console.log('socket user connected')
+//     // Now, you can use the 'user' object as needed
+//     console.log('User:', user)
 
-//   socket.on('send-message', data => {
-//     console.log(data)
-//     chatService.chat_message(data)
-//   });
-  
+//     socket.on('send-message', data => {
+//       console.log(data)
+//       //   chatService.chat_message(data)
+//     })
 
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected')
+//     socket.on('disconnect', () => {
+//       console.log('user disconnected')
+//     })
 //   })
-// })
+// }
 
-// // server.listen(5001, () => {
-// //   console.log(`Server is running on 5001 ${5001}`)
-// // })
+// IO()

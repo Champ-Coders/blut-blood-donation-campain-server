@@ -1,11 +1,12 @@
-import { Model, Types } from 'mongoose'
+import { Model} from 'mongoose'
 
 export type IChat = {
-  sender: Types.ObjectId
-  receiver: Types.ObjectId
+  senderEmail: string
+  receiverEmail: string
   message: string
   messageType: 'img' | 'text' | 'file'
   img?: string
+  is_deleted?: true
   //   reply: string
   //   types: 'message' | 'reply'
 }
