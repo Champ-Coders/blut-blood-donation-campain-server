@@ -69,7 +69,7 @@ const getSIngleUserMessage = async (
       { senderEmail: senderData?.email, receiverEmail },
       { senderEmail: senderData?.email, receiverEmail: receiverEmail },
     ],
-  })
+  }).sort({ updatedAt: 'desc' })
   return getAllMessage
 }
 
