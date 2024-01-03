@@ -7,6 +7,10 @@ const notificationSchema = new Schema<INotification, NotificationModel>(
       type: String,
       optional: true,
     },
+    hasNotification: {
+      type: Boolean,
+      default: false,
+    },
     notificationTitle: {
       type: String,
       optional: true,
