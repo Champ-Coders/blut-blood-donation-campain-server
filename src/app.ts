@@ -77,7 +77,7 @@ io.on('connection', (socket: Socket) => {
   socket.on('send-message', data => {
     // console.log(data)
     chatService.createmessage(data)
-    io.emit('new-message', data)
+    io.emit('update-message', data)
     // ! for sent message to frontend;
   })
 

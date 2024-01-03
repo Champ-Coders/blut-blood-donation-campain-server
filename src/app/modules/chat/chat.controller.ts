@@ -7,7 +7,7 @@ import { chatService } from './chat.service'
 
 const createMessage = catchAsync(async (req: Request, res: Response) => {
   const data = req.body
-  console.log('🚀 ~ file: chat.controller.ts:9 ~ createMessage ~ data:', data)
+  // console.log('🚀 ~ file: chat.controller.ts:9 ~ createMessage ~ data:', data)
 
   const result = await chatService.createmessage(data)
   sendResponse<IChat>(res, {
@@ -20,7 +20,7 @@ const createMessage = catchAsync(async (req: Request, res: Response) => {
 
 const getAllMessagedUser = catchAsync(async (req: Request, res: Response) => {
   const result = await chatService.getAllMessagedUser()
-  console.log('chat user', result)
+  // console.log('chat user', result)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -30,11 +30,11 @@ const getAllMessagedUser = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getSingleUserMessage = catchAsync(async (req: Request, res: Response) => {
-  const senderEmail = req.params.sender
-  console.log(
-    '🚀 ~ file: chat.controller.ts:34 ~ getSingleUserMessage ~ senderEmail:',
-    senderEmail
-  )
+  const senderEmail = req.params.email
+  // console.log(
+  //   '🚀 ~ file: chat.controller.ts:34 ~ getSingleUserMessage ~ senderEmail:',
+  //   senderEmail
+  // )
 
   const result = await chatService.getSIngleUserMessage(
     senderEmail,
@@ -43,27 +43,25 @@ const getSingleUserMessage = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'All Message Retrieved Successfully!',
+    message: 'All User Message Retrieved Successfully!',
     data: result,
   })
 })
-// const getAdminMessage = catchAsync(async (req: Request, res: Response) => {
-//   const senderEmail = req.params.sender
+const getAdminMessage = catchAsync(async (req: Request, res: Response) => {
+  const senderId = req.params.sender
 
-//   const result = await chatService.getSIngleUserMessage(
-//     senderEmail,
-//     'admin@admin.com'
-//   )
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'All Message Retrieved Successfully!',
-//     data: result,
-//   })
-// })
+  const result = await chatService.getAdminMessage(senderId, 'admin@admin.com')
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All Admin Message Retrieved Successfully!',
+    data: result,
+  })
+})
 
 export const chatController = {
   createMessage,
   getAllMessagedUser,
   getSingleUserMessage,
+  getAdminMessage,
 }
