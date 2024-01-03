@@ -8,7 +8,10 @@ const insertIntoDB = async (data: IBlog): Promise<IBlog> => {
 
 const getAllData = async (): Promise<IBlog[]> => {
   const result = await Blog.find({})
-    .populate('user')
+    .populate({
+      path: 'user',
+      select: ['_id', 'name', 'email', 'imgUrl'],
+    })
     .populate({
       path: 'comments',
       populate: {
@@ -23,7 +26,10 @@ const getAllData = async (): Promise<IBlog[]> => {
 
 const getSingleData = async (id: string): Promise<IBlog | null> => {
   const result = await Blog.findOne({ _id: id })
-    .populate('user')
+    .populate({
+      path: 'user',
+      select: ['_id', 'name', 'email', 'imgUrl'],
+    })
     .populate({
       path: 'comments',
       populate: {
