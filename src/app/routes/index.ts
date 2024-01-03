@@ -53,7 +53,7 @@ const moduleRoutes = [
     path: '/volunteer',
     route: VolunteersRoutes,
   },
-  {
+  { 
     path: '/blog-comment',
     route: BlogCommentRoutes,
   },
