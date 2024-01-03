@@ -7,7 +7,7 @@ import { chatService } from './chat.service'
 
 const createMessage = catchAsync(async (req: Request, res: Response) => {
   const data = req.body
-  // console.log('🚀 ~ file: chat.controller.ts:9 ~ createMessage ~ data:', data)
+  console.log('🚀 ~ file: chat.controller.ts:9 ~ createMessage ~ data:', data)
 
   const result = await chatService.createmessage(data)
   sendResponse<IChat>(res, {
