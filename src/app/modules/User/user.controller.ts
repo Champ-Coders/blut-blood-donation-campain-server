@@ -88,6 +88,8 @@ const myProfile = catchAsync(async (req: Request, res: Response) => {
 
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
   const userInfo = req?.user
+  console.log("🚀 ~ file: user.controller.ts:91 ~ updateProfile ~ userInfo:", userInfo)
+
 
   const result = await UserService.updateProfile(
     req.body,
@@ -131,7 +133,7 @@ const deleteProfileByAdmin = catchAsync(async (req: Request, res: Response) => {
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const userInfo = req?.user
 
-// console.log(req.body,"...............");
+  // console.log(req.body,"...............");
   await UserService.changePassword(userInfo as UserInfoFromToken, req.body)
 
   sendResponse(res, {
@@ -183,6 +185,7 @@ const getIndividualGroupUsers = catchAsync(
 
 const getSingleUser = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id
+  console.log('🚀 ~ file: user.controller.ts:186 ~ getSingleUser ~ id:', id)
 
   const result = await UserService.getSingleUser(id)
 

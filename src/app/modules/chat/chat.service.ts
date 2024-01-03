@@ -2,6 +2,7 @@ import httpStatus from 'http-status'
 import ApiError from '../../../errors/ApiErrors'
 import { User } from '../User/user.modal'
 import { Chat } from './chat.model'
+import { ENUM_USER_ROLE } from '../../../enums/user'
 
 const createmessage = async (payload: any) => {
   console.log('🚀 ~ file: chat.service.ts:2 ~ payload:', payload)
@@ -49,7 +50,8 @@ const createmessage = async (payload: any) => {
 }
 
 const getAllMessagedUser = async () => {
-  const allUser = await User.find({ isChat: true })
+  const allUser = await User.find({ isChat: true, role: ENUM_USER_ROLE.USER })
+
   return allUser
 }
 
@@ -57,6 +59,21 @@ const getSIngleUserMessage = async (
   senderEmail: string,
   receiverEmail: string
 ) => {
+  console.log(senderEmail, receiverEmail)
+
+  const senderData = await User.findById(senderEmail)
+  console.log('🚀 ~ file: chat.service.ts:65 ~ senderData:', senderData)
+
+  const getAllMessage = await Chat.find({
+    $or: [
+      { senderEmail: senderData?.email, receiverEmail },
+      { senderEmail: senderData?.email, receiverEmail: receiverEmail },
+    ],
+  })
+  return getAllMessage
+}
+
+const getAdminMessage = async (senderEmail: string, receiverEmail: string) => {
   console.log(senderEmail, receiverEmail)
 
   const getAllMessage = await Chat.find({
@@ -72,4 +89,5 @@ export const chatService = {
   createmessage,
   getSIngleUserMessage,
   getAllMessagedUser,
+  getAdminMessage,
 }
