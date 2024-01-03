@@ -3,10 +3,11 @@ import httpStatus from 'http-status'
 import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
 import { INotification } from './notification.interface'
+import { NotificationService } from './notification.service'
 
 const getAllData = catchAsync(async (req: Request, res: Response) => {
   const result = await NotificationService.getAllData()
-  sendResponse<INotification>(res, {
+  sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Get Notification Successfully!',

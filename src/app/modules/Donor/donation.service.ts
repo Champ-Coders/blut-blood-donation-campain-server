@@ -1,16 +1,16 @@
+import httpStatus from 'http-status'
+import mongoose, { SortOrder } from 'mongoose'
+import ApiError from '../../../errors/ApiErrors'
+import { paginationHelpers } from '../../../helpers/paginationHelpers'
 import {
   IGenericResponse,
   IPaginationOptions,
   UserInfoFromToken,
 } from '../../../interfaces/common'
-import mongoose, { SortOrder } from 'mongoose'
-import httpStatus from 'http-status'
+import { User } from '../User/user.modal'
+import { donationFilterableField } from './donation.constant'
 import { IDonation, IDonationFilters } from './donation.interface'
 import Donation from './donation.modal'
-import { User } from '../User/user.modal'
-import ApiError from '../../../errors/ApiErrors'
-import { donationFilterableField } from './donation.constant'
-import { paginationHelpers } from '../../../helpers/paginationHelpers'
 
 const bloodRequest = async (
   payload: Partial<IDonation>,
@@ -35,6 +35,11 @@ const bloodRequest = async (
   }
   payload.userId = userInfo.id
   const session = await mongoose.startSession()
+
+  // await Notification.create({
+  //   userId: userInfo.id,
+  //   message: `Your request has been sent to ${donor.name}`,
+  // })
 
   let result
   try {

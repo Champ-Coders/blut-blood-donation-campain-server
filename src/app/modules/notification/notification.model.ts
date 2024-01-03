@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose'
 import { INotification, NotificationModel } from './notification.interface'
- 
 
 const notificationSchema = new Schema<INotification, NotificationModel>(
   {
@@ -26,4 +25,4 @@ const notificationSchema = new Schema<INotification, NotificationModel>(
   }
 )
 
-export const Chat = model('Chat', notificationSchema)
+export const Notification = model('Notification', notificationSchema)

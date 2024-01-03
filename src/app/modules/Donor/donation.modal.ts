@@ -8,6 +8,7 @@ const donationSchema = new Schema<IDonation>(
       type: Boolean,
       default: false,
     },
+
     donnerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
