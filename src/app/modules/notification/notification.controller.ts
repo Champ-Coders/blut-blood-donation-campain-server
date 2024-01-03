@@ -26,7 +26,20 @@ const createData = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const updateData = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  const result = await NotificationService.updateData(id)
+  sendResponse<INotification>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Notification Update Successfully!',
+    data: result,
+  })
+})
+
 export const NotificationController = {
   getAllData,
   createData,
+  updateData,
 }

@@ -15,7 +15,16 @@ const createData = async (data: INotification): Promise<INotification> => {
   return result
 }
 
+const updateData = async (userId: string): Promise<INotification[] | any> => {
+  const result = await Notification.updateMany(
+    { user: userId },
+    { $set: { hasNotification: false } }
+  )
+  return result
+}
+
 export const NotificationService = {
   getAllData,
   createData,
+  updateData,
 }
