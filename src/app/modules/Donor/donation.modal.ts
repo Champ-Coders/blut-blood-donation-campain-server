@@ -4,6 +4,10 @@ import { BloodGroups, donationStatus } from './donation.constant'
 
 const donationSchema = new Schema<IDonation>(
   {
+    hasNotification: {
+      type: Boolean,
+      default: false,
+    },
     donnerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -23,6 +27,7 @@ const donationSchema = new Schema<IDonation>(
       enum: BloodGroups,
       required: true,
     },
+
     expectedDate: {
       type: Date,
       required: true,

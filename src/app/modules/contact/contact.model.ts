@@ -18,6 +18,7 @@ const contactSchema = new Schema<IContact, ContactModel>(
         required: true,
       },
     },
+
     message: {
       type: String,
       required: true,
@@ -26,7 +27,6 @@ const contactSchema = new Schema<IContact, ContactModel>(
       type: String,
       required: true,
     },
-  
   },
   {
     timestamps: true,
