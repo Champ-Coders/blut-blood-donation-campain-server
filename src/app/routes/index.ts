@@ -5,13 +5,14 @@ import { BlogRoutes } from '../modules/blog/blog.routes'
 import { FaqsRoutes } from '../modules/faqs/faqs.routes'
 
 import { DonationRoutes } from '../modules/Donor/donation.route'
-import { ServicesRoutes } from '../modules/services/services.routes'
-import { EventRoutes } from '../modules/event/event.routes'
-import { ReviewRoutes } from '../modules/review/review.routes'
-import { VolunteersRoutes } from '../modules/volunteers/volunteers.routes'
 import { BlogCommentRoutes } from '../modules/blogComment/blogComment.routes'
-import { ReceiveRoutes } from '../modules/receive/receive.route'
 import { ContactRoutes } from '../modules/contact/contact.routes'
+import { EventRoutes } from '../modules/event/event.routes'
+import { NotificationRoutes } from '../modules/notification/notification.routes'
+import { ReceiveRoutes } from '../modules/receive/receive.route'
+import { ReviewRoutes } from '../modules/review/review.routes'
+import { ServicesRoutes } from '../modules/services/services.routes'
+import { VolunteersRoutes } from '../modules/volunteers/volunteers.routes'
 
 const router = express.Router()
 
@@ -52,16 +53,25 @@ const moduleRoutes = [
     path: '/volunteer',
     route: VolunteersRoutes,
   },
-  { blogApi_hasanrifat
+  {
     path: '/blog-comment',
     route: BlogCommentRoutes,
   },
+  {
     path: '/receive',
     route: ReceiveRoutes,
   },
   {
     path: '/contact',
     route: ContactRoutes,
+  },
+  {
+    path: '/contact',
+    route: ContactRoutes,
+  },
+  {
+    path: '/notification',
+    route: NotificationRoutes,
   },
 ]
 

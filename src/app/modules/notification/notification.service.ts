@@ -3,6 +3,10 @@ import { Notification } from './notification.model'
 
 const getAllData = async (): Promise<INotification[]> => {
   const result = await Notification.find({})
+    .populate({
+      path: 'user',
+    })
+    .sort({ createdAt: -1 })
   return result
 }
 

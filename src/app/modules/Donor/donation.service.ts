@@ -11,6 +11,7 @@ import { User } from '../User/user.modal'
 import { donationFilterableField } from './donation.constant'
 import { IDonation, IDonationFilters } from './donation.interface'
 import Donation from './donation.modal'
+import { Notification } from '../notification/notification.model'
 
 const bloodRequest = async (
   payload: Partial<IDonation>,
@@ -44,6 +45,15 @@ const bloodRequest = async (
   let result
   try {
     session.startTransaction()
+
+    await Notification.create(
+      {
+        userId: userInfo.id,
+        message: `Your request has been sent to ${donor.name}`,
+      },
+      { session }
+    )
+
     result = await Donation.create([payload], { session })
 
     await User.findOneAndUpdate(
