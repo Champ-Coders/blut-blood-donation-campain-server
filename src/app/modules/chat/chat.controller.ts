@@ -20,6 +20,7 @@ const createMessage = catchAsync(async (req: Request, res: Response) => {
 
 const getAllMessagedUser = catchAsync(async (req: Request, res: Response) => {
   const result = await chatService.getAllMessagedUser()
+  console.log('chat user', result)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -29,11 +30,15 @@ const getAllMessagedUser = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getSingleUserMessage = catchAsync(async (req: Request, res: Response) => {
-  const { senderEmail, receiverEmail } = req.body
+  const senderEmail = req.params.sender
+  console.log(
+    '🚀 ~ file: chat.controller.ts:34 ~ getSingleUserMessage ~ senderEmail:',
+    senderEmail
+  )
 
   const result = await chatService.getSIngleUserMessage(
     senderEmail,
-    receiverEmail
+    'admin@admin.com'
   )
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -42,6 +47,20 @@ const getSingleUserMessage = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+// const getAdminMessage = catchAsync(async (req: Request, res: Response) => {
+//   const senderEmail = req.params.sender
+
+//   const result = await chatService.getSIngleUserMessage(
+//     senderEmail,
+//     'admin@admin.com'
+//   )
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'All Message Retrieved Successfully!',
+//     data: result,
+//   })
+// })
 
 export const chatController = {
   createMessage,

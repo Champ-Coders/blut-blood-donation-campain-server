@@ -74,15 +74,18 @@ const updateUserZodSchema = z.object({
       phoneNumber: z.string().min(11).max(14).optional(),
       bloodGroup: z.enum([...BloodGroups] as [string, ...string[]]).optional(),
       dateOfBirth: z.string().optional(),
-      address: z
-        .object({
-          village: z.string().optional(),
-          postOffice: z.string().optional(),
-          thana: z.string().optional(),
-          division: z.string().optional(),
-          district: z.string().optional(),
-        })
-        .optional(),
+      address: z.string().optional(),
+      email: z.string().optional(),
+
+      // address: z
+      //   .object({
+      //     village: z.string().optional(),
+      //     postOffice: z.string().optional(),
+      //     thana: z.string().optional(),
+      //     division: z.string().optional(),
+      //     district: z.string().optional(),
+      //   })
+      //   .optional(),
       available: z.boolean().optional(),
       totalDonation: z.number().optional(),
     })
