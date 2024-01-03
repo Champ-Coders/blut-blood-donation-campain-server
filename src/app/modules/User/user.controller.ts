@@ -102,9 +102,36 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const updateProfileByAdmin = catchAsync(async (req: Request, res: Response) => {
+  const id = req?.params.id
+
+  const result = await UserService.updateProfileByAdmin(req.body, id)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile updated successfully!',
+    data: result,
+  })
+})
+
+const deleteProfileByAdmin = catchAsync(async (req: Request, res: Response) => {
+  const id = req?.params.id
+
+  const result = await UserService.deleteProfileByAdmin(id)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile deleted!',
+    data: result,
+  })
+})
+
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const userInfo = req?.user
 
+// console.log(req.body,"...............");
   await UserService.changePassword(userInfo as UserInfoFromToken, req.body)
 
   sendResponse(res, {
@@ -167,6 +194,42 @@ const getSingleUser = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const forgetPassword = catchAsync(async (req: Request, res: Response) => {
+  const email = req.body.email
+  const result = await UserService.forgetPassword(email)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: '',
+    data: result,
+  })
+})
+
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  const { id, token } = req.params
+
+  const result = await UserService.resetPassword(id, token)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password reset successfully!',
+    data: result,
+  })
+})
+const changeRole = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
+  const result = await UserService.changeRole(id)
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Role changed successfully',
+    data: result,
+  })
+})
+
 export const UserController = {
   createUser,
   loginUser,
@@ -177,4 +240,9 @@ export const UserController = {
   getAllUsers,
   getIndividualGroupUsers,
   getSingleUser,
+  forgetPassword,
+  changeRole,
+  updateProfileByAdmin,
+  deleteProfileByAdmin,
+  resetPassword,
 }

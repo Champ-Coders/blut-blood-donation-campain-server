@@ -70,6 +70,22 @@ const acceptRequest = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const acceptRequestByAdmin = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
+
+  const result = await DonationService.acceptRequestByAdmin(
+    id,
+    req.user as UserInfoFromToken
+  )
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Donation Request Accepted Successfully.',
+    data: result,
+  })
+})
+
 const cancelRequest = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id
   const result = await DonationService.cancelRequest(
@@ -91,4 +107,5 @@ export const DonationController = {
   bloodRequest,
   cancelRequest,
   acceptRequest,
+  acceptRequestByAdmin,
 }

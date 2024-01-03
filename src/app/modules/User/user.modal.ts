@@ -6,6 +6,10 @@ import { BloodGroups } from '../Donor/donation.constant'
 import { userRoles } from './user.constant'
 
 export const userSchema = new Schema<IUser, UserModel>({
+  imgUrl: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -36,8 +40,26 @@ export const userSchema = new Schema<IUser, UserModel>({
     required: true,
   },
   address: {
-    type: String,
-    required: true,
+    village: {
+      type: String,
+      required: true,
+    },
+    postOffice: {
+      type: String,
+      required: true,
+    },
+    thana: {
+      type: String,
+      required: true,
+    },
+    division: {
+      type: String,
+      required: true,
+    },
+    district: {
+      type: String,
+      required: true,
+    },
   },
   dateOfBirth: {
     type: Date,
@@ -65,6 +87,10 @@ export const userSchema = new Schema<IUser, UserModel>({
     required: true,
     default: 0,
     select: false,
+  },
+  isChat: {
+    type: Boolean,
+    default: false,
   },
 })
 

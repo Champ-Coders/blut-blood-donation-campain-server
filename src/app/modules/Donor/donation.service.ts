@@ -95,7 +95,6 @@ const getAllDonationInfo = async (
 
   // if no condition is given
   const query = andConditions.length > 0 ? { $and: andConditions } : {}
-
   const result = await Donation.find(query)
     .sort(sortConditions)
     .skip(skip)
@@ -143,6 +142,63 @@ const acceptRequest = async (
       httpStatus.UNAUTHORIZED,
       'This request is not for you!!!'
     )
+  }
+  if (donationRequest.status != 'pending') {
+    throw new ApiError(httpStatus.BAD_REQUEST, `Already accept the request!!!`)
+  }
+
+  const session = await mongoose.startSession()
+
+  let result
+
+  try {
+    session.startTransaction()
+
+    await User.findOneAndUpdate(
+      { _id: donationRequest.donnerId },
+      {
+        $inc: { notification: -1, totalDonation: 1 },
+        $set: { lastDonation: new Date(), available: false },
+      },
+      {
+        session,
+      }
+    )
+
+    result = await Donation.findByIdAndUpdate(
+      id,
+      { $set: { status: 'accept' } },
+      { new: true, session }
+    )
+
+    await session.commitTransaction()
+    await session.endSession()
+  } catch (error) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw error
+  }
+
+  return result
+}
+
+const acceptRequestByAdmin = async (
+  id: string,
+  userInfo: UserInfoFromToken
+): Promise<IDonation | null> => {
+  const donationRequest = await Donation.findById(id)
+
+  if (!donationRequest) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'There is info with this id!!!')
+  }
+
+  const donor = await User.findById(userInfo.id)
+  if (!donor) {
+    throw new ApiError(httpStatus.CONFLICT, 'Your profile does not exist!!!')
+  }
+
+  if (donor.role != 'admin') {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not an admin!!!')
   }
   if (donationRequest.status != 'pending') {
     throw new ApiError(httpStatus.BAD_REQUEST, `Already accept the request!!!`)
@@ -247,4 +303,5 @@ export const DonationService = {
   bloodRequest,
   cancelRequest,
   acceptRequest,
+  acceptRequestByAdmin,
 }

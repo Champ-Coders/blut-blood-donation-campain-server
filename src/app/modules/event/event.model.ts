@@ -19,7 +19,7 @@ const colonySchema = new Schema<IEvent, EventModel>(
       type: String,
       required: true,
     },
-   
+
     event_time: {
       type: String,
       required: true,
@@ -31,6 +31,10 @@ const colonySchema = new Schema<IEvent, EventModel>(
     location: {
       type: String,
       required: true,
+    },
+    is_popular: {
+      type: Boolean,
+      default: false,
     },
   },
   {
