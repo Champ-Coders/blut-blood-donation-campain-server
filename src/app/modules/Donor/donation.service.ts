@@ -215,7 +215,6 @@ const acceptRequestByAdmin = async (
   userInfo: UserInfoFromToken
 ): Promise<IDonation | null> => {
   const donationRequest = await Donation.findById(id)
-
   if (!donationRequest) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'There is info with this id!!!')
   }
@@ -354,6 +353,45 @@ const cancelRequest = async (
   return result
 }
 
+const donationRequest = async (
+  userInfo: UserInfoFromToken
+): Promise<IDonation[] | null> => {
+  const user = await User.findById(userInfo.id).select('+notification')
+  if (!user) {
+    throw new ApiError(httpStatus.CONFLICT, 'Your profile is not exist!!!')
+  }
+
+  //  user not found
+  if (!user) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+  }
+
+  const result = await Donation.find({
+    donnerId: userInfo.id,
+    status: 'pending',
+  }).populate(['userId', 'donnerId'])
+
+  console.log(result, 'result')
+
+  return result
+}
+
+const donationHistory = async (
+  userInfo: UserInfoFromToken
+): Promise<IDonation[] | null> => {
+  const user = await User.findById(userInfo.id).select('+notification')
+  //  user not found
+  if (!user) {
+    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+  }
+
+  const result = await Donation.find({
+    donnerId: userInfo.id,
+  }).populate(['userId', 'donnerId'])
+
+  return result
+}
+
 export const DonationService = {
   getAllDonationInfo,
   getSingleDonationInfo,
@@ -361,4 +399,6 @@ export const DonationService = {
   cancelRequest,
   acceptRequest,
   acceptRequestByAdmin,
+  donationRequest,
+  donationHistory,
 }
