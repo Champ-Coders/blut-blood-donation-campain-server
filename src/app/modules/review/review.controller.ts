@@ -60,10 +60,24 @@ const deleteData = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+// get reviews by user id
+const getReviewsByUserId = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id
+
+  const result = await ReviewService.getReviewsByUserId(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All Data Retrieved Successfully!',
+    data: result,
+  })
+})
+
 export const ReviewController = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateData,
   deleteData,
+  getReviewsByUserId,
 }

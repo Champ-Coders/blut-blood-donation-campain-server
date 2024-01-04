@@ -21,4 +21,7 @@ router.post(
   ReviewController.insertIntoDB
 )
 
+// get reviews by user id
+router.get('/myReviews/:id', ReviewController.getReviewsByUserId)
+
 export const ReviewRoutes = router
