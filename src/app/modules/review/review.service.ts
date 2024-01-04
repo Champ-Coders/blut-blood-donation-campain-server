@@ -1,3 +1,4 @@
+
 import { IReview } from './review.interface'
 import { Review } from './review.model'
 
@@ -33,10 +34,21 @@ const deleteData = async (id: string): Promise<IReview | null> => {
   return result
 }
 
+// get reviews by user id
+const getReviewsByUserId = async (
+  id:string
+): Promise<IReview[]> => {
+  const result = await Review.find({ user: id })
+    .populate('user')
+    .populate('service')
+  return result
+}
+
 export const ReviewService = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateData,
   deleteData,
+  getReviewsByUserId,
 }
