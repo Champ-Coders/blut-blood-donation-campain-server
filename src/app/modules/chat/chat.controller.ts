@@ -32,10 +32,7 @@ const getAllMessagedUser = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleUserMessage = catchAsync(async (req: Request, res: Response) => {
   const senderEmail = req.params.email
-  // console.log(
-  //   '🚀 ~ file: chat.controller.ts:34 ~ getSingleUserMessage ~ senderEmail:',
-  //   senderEmail
-  // )
+
 
   const result = await chatService.getSIngleUserMessage(
     senderEmail,

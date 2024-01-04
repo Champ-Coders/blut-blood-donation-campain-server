@@ -69,10 +69,6 @@ const createmessage = async (payload: any) => {
   )
 
   const createMessage = await Chat.create(createMessageData)
-  // console.log(
-  //   '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
-  //   createMessage
-  // )
 
   return createMessage
 }
@@ -133,14 +129,14 @@ const getSIngleUserMessage = async (
   senderEmail: string,
   receiverEmail: string
 ) => {
-  // console.log(senderEmail, receiverEmail)
+
   const getAllMessage = await Chat.find({
     $or: [
       { senderEmail: senderEmail, receiverEmail },
       { senderEmail: senderEmail, receiverEmail: receiverEmail },
     ],
   })
-  // .sort({ updatedAt: 'desc' })
+
   return getAllMessage
 }
 
