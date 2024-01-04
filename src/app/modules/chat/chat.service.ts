@@ -15,13 +15,25 @@ const createmessage = async (payload: any) => {
   //   checkEmail
   // )
 
+  if (!checkEmail) {
+    throw new ApiError(httpStatus.CONFLICT, 'Could not find the user!!!')
+  } else {
+    payload.role = checkEmail.role
+  }
+
+  const updateUserIsChat = await User.findOneAndUpdate(
+    { _id: checkEmail?._id },
+    {
+      isChat: true,
+    },
+    {
+      new: true,
+    }
+  )
+
   if (payload?.type === 'reply') {
     const isUserById = await User.findById(payload?._id)
 
-    // console.log(
-    //   '🚀 ~ file: chat.service.ts:20 ~ createmessage ~ isUserById:',
-    //   isUserById
-    // )
 
     const createMessage = await Chat.create({
       message: payload?.message,
@@ -40,21 +52,6 @@ const createmessage = async (payload: any) => {
     return createMessage
   }
 
-  if (!checkEmail) {
-    throw new ApiError(httpStatus.CONFLICT, 'Could not find the user!!!')
-  } else {
-    payload.role = checkEmail.role
-  }
-
-  const updateUserIsChat = await User.findOneAndUpdate(
-    { _id: checkEmail?._id },
-    {
-      isChat: true,
-    },
-    {
-      new: true,
-    }
-  )
   const createMessageData = {
     message: payload?.message,
     img:
@@ -129,7 +126,6 @@ const getSIngleUserMessage = async (
   senderEmail: string,
   receiverEmail: string
 ) => {
-
   const getAllMessage = await Chat.find({
     $or: [
       { senderEmail: senderEmail, receiverEmail },
@@ -155,7 +151,6 @@ const getAdminMessage = async (senderId: string, receiverEmail: string) => {
   // .sort({ updatedAt: 'desc' })
   // console.log("🚀 ~ file: chat.service.ts:161 ~ getAdminMessage ~ getAllMessage:", getAllMessage)
 
-  
   return getAllMessage
 }
 
