@@ -9,6 +9,10 @@ const router = express.Router()
 
 router.get('/', DonationController.getAllDonationInfo)
 
+router.get('/request', auth(), DonationController.donationRequest)
+
+router.get('/history', auth(), DonationController.donationHistory)
+
 router.get('/:id', DonationController.getSingleDonationInfo)
 
 router.post(

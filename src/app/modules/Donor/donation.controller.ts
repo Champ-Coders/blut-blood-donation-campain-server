@@ -104,6 +104,32 @@ const cancelRequest = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const donationRequest = catchAsync(async (req: Request, res: Response) => {
+  const result = await DonationService.donationRequest(
+    req.user as UserInfoFromToken
+  )
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Donation Request get Successfully.',
+    data: result,
+  })
+})
+
+const donationHistory = catchAsync(async (req: Request, res: Response) => {
+  const result = await DonationService.donationHistory(
+    req.user as UserInfoFromToken
+  )
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Donation Request History get Successfully.',
+    data: result,
+  })
+})
+
 export const DonationController = {
   getAllDonationInfo,
   getSingleDonationInfo,
@@ -111,4 +137,6 @@ export const DonationController = {
   cancelRequest,
   acceptRequest,
   acceptRequestByAdmin,
+  donationRequest,
+  donationHistory,
 }
