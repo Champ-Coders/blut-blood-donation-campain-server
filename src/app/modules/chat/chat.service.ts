@@ -25,6 +25,7 @@ const createmessage = async (payload: any) => {
     { _id: checkEmail?._id },
     {
       isChat: true,
+      chatTime: Date.now(),
     },
     {
       new: true,
@@ -33,7 +34,6 @@ const createmessage = async (payload: any) => {
 
   if (payload?.type === 'reply') {
     const isUserById = await User.findById(payload?._id)
-
 
     const createMessage = await Chat.create({
       message: payload?.message,
@@ -117,7 +117,10 @@ const createreply = async (payload: any) => {
 }
 
 const getAllMessagedUser = async () => {
-  const allUser = await User.find({ isChat: true, role: ENUM_USER_ROLE.USER })
+  const allUser = await User.find({
+    isChat: true,
+    role: ENUM_USER_ROLE.USER,
+  }).sort({ chatTime: 'desc' })
 
   return allUser
 }
