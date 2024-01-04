@@ -14,6 +14,7 @@ export type IChangePassword = {
 
 export const userFilterableField = [
   'searchTerm',
+  'available',
   'name',
   'email',
   'phoneNumber',

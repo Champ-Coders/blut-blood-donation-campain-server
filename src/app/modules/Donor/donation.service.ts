@@ -1,16 +1,17 @@
+import httpStatus from 'http-status'
+import mongoose, { SortOrder } from 'mongoose'
+import ApiError from '../../../errors/ApiErrors'
+import { paginationHelpers } from '../../../helpers/paginationHelpers'
 import {
   IGenericResponse,
   IPaginationOptions,
   UserInfoFromToken,
 } from '../../../interfaces/common'
-import mongoose, { SortOrder } from 'mongoose'
-import httpStatus from 'http-status'
+import { User } from '../User/user.modal'
+import { Notification } from '../notification/notification.model'
+import { donationFilterableField } from './donation.constant'
 import { IDonation, IDonationFilters } from './donation.interface'
 import Donation from './donation.modal'
-import { User } from '../User/user.modal'
-import ApiError from '../../../errors/ApiErrors'
-import { donationFilterableField } from './donation.constant'
-import { paginationHelpers } from '../../../helpers/paginationHelpers'
 
 const bloodRequest = async (
   payload: Partial<IDonation>,
@@ -36,10 +37,37 @@ const bloodRequest = async (
   payload.userId = userInfo.id
   const session = await mongoose.startSession()
 
+  // {
+  //   bag: 1,
+  //   donnerId: '6582ba903e41d51f5948ff4e',
+  //   bloodGroup: 'A-',
+  //   expectedDate: '2024-01-05',
+  //   patientDetails: 'ami rokto cai '
+  // } {
+  //   id: '658bd18fc79d3b5406a1b6e1',
+  //   email: 'admin@admin.com',
+  //   role: 'admin',
+  //   iat: 1704272913,
+  //   exp: 1704359313
+  // } faysal
+
   let result
   try {
     session.startTransaction()
     result = await Donation.create([payload], { session })
+
+    await Notification.create(
+      [
+        {
+          hasNotification: true,
+          user: payload.donnerId,
+          notificationTitle: `Blood Request from ${user.name} group ${payload.bloodGroup}`,
+          notificationBody: `Request for ${payload.bloodGroup} blood group. Date ${payload.expectedDate}`,
+        },
+      ],
+
+      { session }
+    )
 
     await User.findOneAndUpdate(
       { _id: payload.donnerId },
@@ -95,7 +123,6 @@ const getAllDonationInfo = async (
 
   // if no condition is given
   const query = andConditions.length > 0 ? { $and: andConditions } : {}
-
   const result = await Donation.find(query)
     .sort(sortConditions)
     .skip(skip)
@@ -179,7 +206,7 @@ const acceptRequest = async (
     await session.endSession()
     throw error
   }
-
+  console.log(result, 'result Faysal 0')
   return result
 }
 
@@ -223,6 +250,19 @@ const acceptRequestByAdmin = async (
       }
     )
 
+    await Notification.create(
+      [
+        {
+          hasNotification: true,
+          user: donationRequest.userId,
+          notificationTitle: `Blood Request Accepted`,
+          notificationBody: `Your request for ${donationRequest.bloodGroup} blood group is accepted.`,
+        },
+      ],
+
+      { session }
+    )
+
     result = await Donation.findByIdAndUpdate(
       id,
       { $set: { status: 'accept' } },
@@ -236,7 +276,7 @@ const acceptRequestByAdmin = async (
     await session.endSession()
     throw error
   }
-
+  console.log(result, 'result Faysal 1')
   return result
 }
 
@@ -281,6 +321,20 @@ const cancelRequest = async (
         session,
       }
     )
+
+    await Notification.create(
+      [
+        {
+          hasNotification: true,
+          user: donationRequest.userId,
+          notificationTitle: `Blood Request Canceled`,
+          notificationBody: `Your request for ${donationRequest.bloodGroup} blood group is canceled.`,
+        },
+      ],
+
+      { session }
+    )
+
     result = await Donation.findByIdAndUpdate(
       id,
       { $set: { status: 'canceled' } },
@@ -294,6 +348,8 @@ const cancelRequest = async (
     await session.endSession()
     throw error
   }
+
+  console.log(result, 'result Faysal 2')
 
   return result
 }

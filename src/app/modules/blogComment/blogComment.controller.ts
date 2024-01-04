@@ -2,22 +2,22 @@ import { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
-import { ReviewService } from './review.service'
-import { IReview } from './review.interface'
+import { IBlogComment } from './blogComment.interface'
+import { BlogCommentService } from './blogComment.service'
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   const data = req.body
-  const result = await ReviewService.insertIntoDB(data)
-  sendResponse<IReview>(res, {
+  const result = await BlogCommentService.insertIntoDB(data)
+  sendResponse<IBlogComment>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Review Create Successfully!',
+    message: 'Blog comment Create Successfully!',
     data: result,
   })
 })
 
 const getAllData = catchAsync(async (req: Request, res: Response) => {
-  const result = await ReviewService.getAllData()
+  const result = await BlogCommentService.getAllData()
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -28,7 +28,7 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleData = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params
-  const result = await ReviewService.getSingleData(id)
+  const result = await BlogCommentService.getSingleData(id)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -40,7 +40,7 @@ const getSingleData = catchAsync(async (req: Request, res: Response) => {
 const updateData = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params
   const data = req.body
-  const result = await ReviewService.updateData(id, data)
+  const result = await BlogCommentService.updateData(id, data)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -51,7 +51,7 @@ const updateData = catchAsync(async (req: Request, res: Response) => {
 
 const deleteData = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params
-  const result = await ReviewService.deleteData(id)
+  const result = await BlogCommentService.deleteData(id)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -60,11 +60,10 @@ const deleteData = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-// get reviews by user id
-const getReviewsByUserId = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id
-
-  const result = await ReviewService.getReviewsByUserId(id)
+// get comments by user id
+const getCommentsByUserId = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params
+  const result = await BlogCommentService.getCommentsByUserId(id)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -73,11 +72,11 @@ const getReviewsByUserId = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-export const ReviewController = {
+export const BlogCommentController = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateData,
   deleteData,
-  getReviewsByUserId,
+  getCommentsByUserId,
 }

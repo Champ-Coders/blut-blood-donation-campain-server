@@ -6,6 +6,7 @@ export type IBlog = {
   image: string
   logo?: string
   user: ObjectId
+  comments?: ObjectId[]
 }
 
 export type BlogModel = Model<IBlog, Record<string, unknown>>

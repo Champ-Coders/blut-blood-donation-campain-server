@@ -19,5 +19,17 @@ const request: RequestHandler = catchAsync(
     })
   }
 )
+const getAllData = catchAsync(async (req: Request, res: Response) => {
+  const userInfo = req?.user
+ 
 
-export const ReceiveController = { request }
+  const result = await ReceiveService.getAllDataDB(userInfo)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All Data Retrieved Successfully!',
+    data: result,
+  })
+})
+
+export const ReceiveController = { request, getAllData }
