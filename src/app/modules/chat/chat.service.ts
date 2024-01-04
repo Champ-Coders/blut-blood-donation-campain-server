@@ -32,10 +32,10 @@ const createmessage = async (payload: any) => {
       receiverEmail: 'admin@admin.com',
       types: 'reply',
     })
-    // console.log(
-    //   '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
-    //   createMessage
-    // )
+    console.log(
+      '🚀 ~ file: chat.service.ts:45 ~ constchat_message= ~ createMessage:',
+      createMessage
+    )
 
     return createMessage
   }
@@ -63,10 +63,10 @@ const createmessage = async (payload: any) => {
     senderEmail: updateUserIsChat?.email,
     receiverEmail: 'admin@admin.com',
   }
-  // console.log(
-  //   '🚀 ~ file: chat.service.ts:37 ~ createmessage ~ createMessageData:',
-  //   createMessageData
-  // )
+  console.log(
+    '🚀 ~ file: chat.service.ts:37 ~ createmessage ~ createMessageData:',
+    createMessageData
+  )
 
   const createMessage = await Chat.create(createMessageData)
   // console.log(
