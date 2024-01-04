@@ -58,10 +58,24 @@ const deleteData = async (id: string): Promise<IBlogComment | null> => {
   return result
 }
 
+// get comments by user id
+const getCommentsByUserId = async (
+  id: string
+): Promise<IBlogComment[]> => {
+  const result = await BlogComment.find({ userId: id })
+    .populate('blogId')
+    .populate('userId')
+    .exec()
+  return result
+}
+
+
+
 export const BlogCommentService = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateData,
   deleteData,
+  getCommentsByUserId,
 }

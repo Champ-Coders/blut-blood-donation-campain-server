@@ -16,5 +16,10 @@ router.patch(
   BlogCommentController.updateData
 )
 router.delete('/:id', BlogCommentController.deleteData)
+// get comments by user id
+router.get('/myComments/:id', BlogCommentController.getCommentsByUserId)
+
+
+
 
 export const BlogCommentRoutes = router

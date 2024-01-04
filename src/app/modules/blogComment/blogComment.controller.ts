@@ -60,10 +60,23 @@ const deleteData = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+// get comments by user id
+const getCommentsByUserId = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params
+  const result = await BlogCommentService.getCommentsByUserId(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All Data Retrieved Successfully!',
+    data: result,
+  })
+})
+
 export const BlogCommentController = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateData,
   deleteData,
+  getCommentsByUserId,
 }
