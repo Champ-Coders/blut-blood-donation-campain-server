@@ -24,7 +24,8 @@ export type IUser = {
   totalReceived: number
   available: boolean
   notification: number
-  isChat: boolean
+  isChat?: boolean
+  chatTime?:Date
 }
 
 export type IUserExist = {
