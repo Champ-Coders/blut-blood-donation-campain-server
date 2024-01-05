@@ -30,6 +30,8 @@ app.use((0, cors_1.default)({
     ],
     credentials: true,
 }));
+
+
 //application  route
 // Application Routes
 app.use('/api/v1/', routes_1.default);
