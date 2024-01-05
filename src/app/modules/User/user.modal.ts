@@ -92,6 +92,11 @@ export const userSchema = new Schema<IUser, UserModel>({
     type: Boolean,
     default: false,
   },
+  chatTime: {
+    type: Date,
+    default: Date.now(),
+    required:false
+  },
 })
 
 userSchema.statics.isUserExist = async function (
