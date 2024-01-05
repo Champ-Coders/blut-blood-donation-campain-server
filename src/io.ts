@@ -1,25 +1,20 @@
-// import { Socket } from 'socket.io'
-// import { io } from './app'
+import { Socket, Server as SocketIoServer } from 'socket.io';
+import { chatService } from './app/modules/chat/chat.service';
 
-// function IO() {
-//   io.on('connection', (socket: Socket) => {
-//     console.log('socket user connected')
+export const initializeSocketConnection = (io: SocketIoServer) => {
+  io.on('connection', (socket: Socket) => {
+    console.log('socket user connected');
 
-//     const userString = socket.handshake.query.user as string
-//     const user = JSON.parse(userString)
+    ///! for create message used socket.emit("send-message",data) in frontend
+    socket.on('send-message', (data) => {
+      console.log(data);
+      chatService.createmessage(data);
+      io.emit('update-message', data);
+      // ! for sent message to frontend;
+    });
 
-//     // Now, you can use the 'user' object as needed
-//     console.log('User:', user)
-
-//     socket.on('send-message', data => {
-//       console.log(data)
-//       //   chatService.chat_message(data)
-//     })
-
-//     socket.on('disconnect', () => {
-//       console.log('user disconnected')
-//     })
-//   })
-// }
-
-// IO()
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
+  });
+};
