@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DonationRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const donation_controller_1 = require("./donation.controller");
+const auth_1 = __importDefault(require("../../middleware/auth"));
+const validateRequest_1 = require("../../middleware/validateRequest");
+const donation_validation_1 = require("./donation.validation");
+const user_1 = require("../../../enums/user");
+const router = express_1.default.Router();
+router.get('/', donation_controller_1.DonationController.getAllDonationInfo);
+router.get('/request', (0, auth_1.default)(), donation_controller_1.DonationController.donationRequest);
+router.get('/history', (0, auth_1.default)(), donation_controller_1.DonationController.donationHistory);
+router.get('/:id', donation_controller_1.DonationController.getSingleDonationInfo);
+router.post('/request', (0, auth_1.default)(), (0, validateRequest_1.RequestValidation)(donation_validation_1.DonationValidation.bloodRequestZodSchema), donation_controller_1.DonationController.bloodRequest);
+router.patch('/cancel-request/:id', (0, auth_1.default)(), donation_controller_1.DonationController.cancelRequest);
+router.patch('/accept-request/:id', (0, auth_1.default)(), donation_controller_1.DonationController.acceptRequest);
+router.patch('/accept-request-admin/:id', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN), donation_controller_1.DonationController.acceptRequestByAdmin);
+exports.DonationRoutes = router;
