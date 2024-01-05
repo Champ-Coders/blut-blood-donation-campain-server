@@ -6,9 +6,10 @@ import globalErrorHandler from './app/middleware/globalErrorHandler'
 import httpStatus from 'http-status'
 import router from './app/routes'
 import cookieParser from 'cookie-parser'
-import { Server as SocketIoServer, Socket } from 'socket.io'
+import { Server as SocketIoServer } from 'socket.io'
 import http from 'http'
-import { chatService } from './app/modules/chat/chat.service'
+
+import { initializeSocketConnection } from './io'
 
 const app: Application = express()
 const port = 5000
@@ -66,27 +67,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
       },
     ],
   })
+
   next()
 })
 
-io.on('connection', (socket: Socket) => {
-  console.log('socket user connected')
-
-  ///! for create message used socket.emit("send-message",data) in frontend
-  socket.on('send-message', data => {
-    console.log(data)
-    chatService.createmessage(data)
-    io.emit('update-message', data)
-    // ! for sent message to frontend;
-  })
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
-})
+// Separate socket connection logic
+initializeSocketConnection(io);
 
 export { app, port, server, io }
 
-///! receiver email fixed   admin@admin.com
 
-///!
