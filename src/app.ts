@@ -26,6 +26,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'https://blut-blood-donation-compaign.vercel.app',
+      'https://blut-blood-donation-main.onrender.com',
     ],
     credentials: true,
   })
