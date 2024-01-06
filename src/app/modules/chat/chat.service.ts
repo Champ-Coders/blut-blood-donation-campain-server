@@ -38,8 +38,7 @@ const createmessage = async (payload: any) => {
     const createMessage = await Chat.create({
       message: payload?.message,
       img:
-        payload?.img ||
-        'https://img.freepik.com/free-photo/confident-attractive-caucasian-guy-beige-pullon-smiling-broadly-while-standing-against-gray_176420-44508.jpg?w=1380&t=st=1704185130~exp=1704185730~hmac=59e603b1b189517200baee240e19841cac32cac33e3b18bf388d3af232517699',
+        payload?.img,
       senderEmail: isUserById?.email,
       receiverEmail: 'admin@admin.com',
       types: 'reply',
@@ -54,8 +53,7 @@ const createmessage = async (payload: any) => {
 
   const createMessageData = {
     message: payload?.message,
-    img:
-      payload?.img ,
+    img: payload?.img,
     senderEmail: updateUserIsChat?.email,
     receiverEmail: 'admin@admin.com',
   }
@@ -88,6 +86,7 @@ const createreply = async (payload: any) => {
     { _id: checkEmail?._id },
     {
       isChat: true,
+      chatTime: Date.now(),
     },
     {
       new: true,
@@ -95,8 +94,7 @@ const createreply = async (payload: any) => {
   )
   const createMessageData = {
     message: payload?.message,
-    img:
-      payload?.img ,
+    img: payload?.img,
     senderEmail: 'admin@admin.com',
     receiverEmail: updateUserIsChat?.email,
   }
