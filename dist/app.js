@@ -46,7 +46,7 @@ exports.server = server;
 // Create HTTP server and attach Express app to it;
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: '*',
+        origin: '*', // Add your frontend origin here
         methods: ['GET', 'POST'],
     },
 });

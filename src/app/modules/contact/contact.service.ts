@@ -1,3 +1,4 @@
+import { ModifyResult } from 'mongoose'
 import { IContact } from './contact.interface'
 import { Contact } from './contact.model'
 import { sendMailer } from './sendMail'
@@ -55,9 +56,9 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IContact | null> => {
-  const result = await Contact.findOneAndDelete({ _id: id })
-  return result
-}
+  const result: ModifyResult<IContact> = await Contact.findOneAndDelete({ _id: id });
+  return result.value || null;
+};
 
 export const ContactService = {
   insertIntoDB,
