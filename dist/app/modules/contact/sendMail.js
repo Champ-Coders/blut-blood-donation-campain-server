@@ -18,11 +18,11 @@ const config_1 = __importDefault(require("../../../config"));
 function sendMailer(subject, from, html) {
     return __awaiter(this, void 0, void 0, function* () {
         const transporter = nodemailer_1.default.createTransport({
-            host: 'smtp.gmail.com.',
-            port: 587,
+            host: 'smtp.gmail.com.', //!  gmail host and port for smtp ## Searchby= smtp host in browser
+            port: 587, //!  port for smtp
             // secure: true,
             auth: {
-                user: from,
+                user: from, //! owner email
                 pass: config_1.default.nodeMailer.appPassword,
             },
         });

@@ -8,7 +8,6 @@ type IName = {
 export type IContact = {
   email: string
   name: IName
-
   message: string
   subject: string
 }
