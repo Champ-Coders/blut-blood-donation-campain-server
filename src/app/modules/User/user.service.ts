@@ -51,6 +51,7 @@ const createUser = async (
     id: createdUser.id,
     email: user.email,
     role: 'user',
+    imgUrl: user.imgUrl,
   }
 
   const accessToken = jwtHelpers.createToken(
@@ -81,14 +82,14 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect.')
   }
 
-  const { role, id } = isUserExist
+  const { role, id, imgUrl } = isUserExist
   const accessToken = jwtHelpers.createToken(
-    { id, email, role },
+    { id, email, role, imgUrl },
     config.jwt.jwt_secret as Secret,
     config.jwt.access_token_expires_in as string
   )
   const refreshToken = jwtHelpers.createToken(
-    { id, email, role },
+    { id, email, role, imgUrl },
     config.jwt.refresh_token_secret as Secret,
     config.jwt.refresh_token_expires_in as string
   )
@@ -122,6 +123,7 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
       id: isUserExist.id,
       email: isUserExist.email,
       role: isUserExist.role,
+      imgUrl: isUserExist.imgUrl,
     },
     config.jwt.jwt_secret as Secret,
     config.jwt.access_token_expires_in as string
@@ -391,7 +393,7 @@ const deleteProfileByAdmin = async (id: string): Promise<IUser | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
   }
 
-  const result = await User.findByIdAndDelete(id)
+  const result = await User.findByIdAndDelete(id).lean()
   return result
 }
 

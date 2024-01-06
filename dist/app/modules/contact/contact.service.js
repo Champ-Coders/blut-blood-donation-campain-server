@@ -57,7 +57,7 @@ const updateData = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const deleteData = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield contact_model_1.Contact.findOneAndDelete({ _id: id });
+    const result = yield contact_model_1.Contact.findOneAndDelete({ _id: id }).lean();
     return result;
 });
 exports.ContactService = {

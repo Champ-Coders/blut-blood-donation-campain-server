@@ -12,7 +12,7 @@ const routes_1 = __importDefault(require("./app/routes"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
-const chat_service_1 = require("./app/modules/chat/chat.service");
+const io_1 = require("./io");
 const app = (0, express_1.default)();
 exports.app = app;
 const port = 5000;
@@ -30,8 +30,6 @@ app.use((0, cors_1.default)({
     ],
     credentials: true,
 }));
-
-
 //application  route
 // Application Routes
 app.use('/api/v1/', routes_1.default);
@@ -67,18 +65,5 @@ app.use((req, res, next) => {
     });
     next();
 });
-io.on('connection', (socket) => {
-    console.log('socket user connected');
-    ///! for create message used socket.emit("send-message",data) in frontend
-    socket.on('send-message', data => {
-        console.log(data);
-        chat_service_1.chatService.createmessage(data);
-        io.emit('update-message', data);
-        // ! for sent message to frontend;
-    });
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
-///! receiver email fixed   admin@admin.com
-///!
+// Separate socket connection logic
+(0, io_1.initializeSocketConnection)(io);

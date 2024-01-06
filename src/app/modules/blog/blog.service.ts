@@ -53,7 +53,7 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IBlog | null> => {
-  const result = await Blog.findOneAndDelete({ _id: id })
+  const result = await Blog.findOneAndDelete({ _id: id }).lean()
   return result
 }
 

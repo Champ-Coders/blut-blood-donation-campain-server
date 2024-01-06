@@ -27,7 +27,7 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IBanner | null> => {
-  const result = await Banner.findOneAndDelete({ _id: id })
+  const result = await Banner.findOneAndDelete({ _id: id }).lean()
   return result
 }
 
