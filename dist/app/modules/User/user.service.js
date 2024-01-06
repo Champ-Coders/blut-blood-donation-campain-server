@@ -52,6 +52,7 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
         id: createdUser.id,
         email: user.email,
         role: 'user',
+        imgUrl: user.imgUrl,
     };
     const accessToken = jwtHelpers_1.jwtHelpers.createToken(tokenInfo, config_1.default.jwt.jwt_secret, config_1.default.jwt.access_token_expires_in);
     const refreshToken = jwtHelpers_1.jwtHelpers.createToken(tokenInfo, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
@@ -66,9 +67,9 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (!(yield user_modal_1.User.isPasswordMatched(password, isUserExist.password))) {
         throw new ApiErrors_1.default(http_status_1.default.UNAUTHORIZED, 'Password is incorrect.');
     }
-    const { role, id } = isUserExist;
-    const accessToken = jwtHelpers_1.jwtHelpers.createToken({ id, email, role }, config_1.default.jwt.jwt_secret, config_1.default.jwt.access_token_expires_in);
-    const refreshToken = jwtHelpers_1.jwtHelpers.createToken({ id, email, role }, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
+    const { role, id, imgUrl } = isUserExist;
+    const accessToken = jwtHelpers_1.jwtHelpers.createToken({ id, email, role, imgUrl }, config_1.default.jwt.jwt_secret, config_1.default.jwt.access_token_expires_in);
+    const refreshToken = jwtHelpers_1.jwtHelpers.createToken({ id, email, role, imgUrl }, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
     return {
         accessToken,
         refreshToken,
@@ -92,6 +93,7 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         id: isUserExist.id,
         email: isUserExist.email,
         role: isUserExist.role,
+        imgUrl: isUserExist.imgUrl,
     }, config_1.default.jwt.jwt_secret, config_1.default.jwt.access_token_expires_in);
     return {
         accessToken: newAccessToken,
