@@ -25,7 +25,7 @@ export type IUser = {
   available: boolean
   notification: number
   isChat?: boolean
-  chatTime?:Date
+  chatTime?: Date
 }
 
 export type IUserExist = {
@@ -34,12 +34,15 @@ export type IUserExist = {
   name: string
   role: Role
   id: Types.ObjectId | undefined
+  imgUrl?: string
 }
 
 export type UserModel = {
   isUserExist(
     email: string
-  ): Promise<Pick<IUserExist, 'id' | 'email' | 'name' | 'password' | 'role'>>
+  ): Promise<
+    Pick<IUserExist, 'id' | 'email' | 'name' | 'password' | 'role' | 'imgUrl'>
+  >
 
   isPasswordMatched(
     givenPassword: string,

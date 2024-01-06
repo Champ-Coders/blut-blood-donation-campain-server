@@ -6,4 +6,4 @@ var ENUM_USER_ROLE;
 (function (ENUM_USER_ROLE) {
     ENUM_USER_ROLE["USER"] = "user";
     ENUM_USER_ROLE["ADMIN"] = "admin";
-})(ENUM_USER_ROLE = exports.ENUM_USER_ROLE || (exports.ENUM_USER_ROLE = {}));
+})(ENUM_USER_ROLE || (exports.ENUM_USER_ROLE = ENUM_USER_ROLE = {}));
