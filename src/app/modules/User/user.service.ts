@@ -393,7 +393,7 @@ const deleteProfileByAdmin = async (id: string): Promise<IUser | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist')
   }
 
-  const result = await User.findByIdAndDelete(id)
+  const result = await User.findByIdAndDelete(id).lean()
   return result
 }
 

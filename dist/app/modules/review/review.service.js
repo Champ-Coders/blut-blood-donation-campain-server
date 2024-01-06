@@ -32,7 +32,7 @@ const updateData = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const deleteData = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield review_model_1.Review.findOneAndDelete({ _id: id });
+    const result = yield review_model_1.Review.findOneAndDelete({ _id: id }).lean();
     return result;
 });
 // get reviews by user id

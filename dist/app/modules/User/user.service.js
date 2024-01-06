@@ -294,7 +294,7 @@ const deleteProfileByAdmin = (id) => __awaiter(void 0, void 0, void 0, function*
     if (!isUserExist) {
         throw new ApiErrors_1.default(http_status_1.default.NOT_FOUND, 'User does not exist');
     }
-    const result = yield user_modal_1.User.findByIdAndDelete(id);
+    const result = yield user_modal_1.User.findByIdAndDelete(id).lean();
     return result;
 });
 exports.UserService = {

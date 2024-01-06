@@ -30,7 +30,7 @@ const updateData = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const deleteData = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield banner_model_1.Banner.findOneAndDelete({ _id: id });
+    const result = yield banner_model_1.Banner.findOneAndDelete({ _id: id }).lean();
     return result;
 });
 exports.BannerService = {

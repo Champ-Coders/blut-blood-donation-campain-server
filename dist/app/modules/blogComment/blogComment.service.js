@@ -47,7 +47,7 @@ const updateData = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
 const deleteData = (id) => __awaiter(void 0, void 0, void 0, function* () {
     // remove comment from Blog
     yield blog_model_1.Blog.findOneAndUpdate({ comments: id }, { $pull: { comments: id } }, { new: true });
-    const result = yield blogComment_model_1.BlogComment.findOneAndDelete({ _id: id });
+    const result = yield blogComment_model_1.BlogComment.findOneAndDelete({ _id: id }).lean();
     return result;
 });
 // get comments by user id

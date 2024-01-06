@@ -42,8 +42,7 @@ const createmessage = (payload) => __awaiter(void 0, void 0, void 0, function* (
         const isUserById = yield user_modal_1.User.findById(payload === null || payload === void 0 ? void 0 : payload._id);
         const createMessage = yield chat_model_1.Chat.create({
             message: payload === null || payload === void 0 ? void 0 : payload.message,
-            img: (payload === null || payload === void 0 ? void 0 : payload.img) ||
-                'https://img.freepik.com/free-photo/confident-attractive-caucasian-guy-beige-pullon-smiling-broadly-while-standing-against-gray_176420-44508.jpg?w=1380&t=st=1704185130~exp=1704185730~hmac=59e603b1b189517200baee240e19841cac32cac33e3b18bf388d3af232517699',
+            img: payload === null || payload === void 0 ? void 0 : payload.img,
             senderEmail: isUserById === null || isUserById === void 0 ? void 0 : isUserById.email,
             receiverEmail: 'admin@admin.com',
             types: 'reply',
@@ -53,8 +52,7 @@ const createmessage = (payload) => __awaiter(void 0, void 0, void 0, function* (
     }
     const createMessageData = {
         message: payload === null || payload === void 0 ? void 0 : payload.message,
-        img: (payload === null || payload === void 0 ? void 0 : payload.img) ||
-            'https://img.freepik.com/free-photo/confident-attractive-caucasian-guy-beige-pullon-smiling-broadly-while-standing-against-gray_176420-44508.jpg?w=1380&t=st=1704185130~exp=1704185730~hmac=59e603b1b189517200baee240e19841cac32cac33e3b18bf388d3af232517699',
+        img: payload === null || payload === void 0 ? void 0 : payload.img,
         senderEmail: updateUserIsChat === null || updateUserIsChat === void 0 ? void 0 : updateUserIsChat.email,
         receiverEmail: 'admin@admin.com',
     };
@@ -74,13 +72,13 @@ const createreply = (payload) => __awaiter(void 0, void 0, void 0, function* () 
     }
     const updateUserIsChat = yield user_modal_1.User.findOneAndUpdate({ _id: checkEmail === null || checkEmail === void 0 ? void 0 : checkEmail._id }, {
         isChat: true,
+        chatTime: Date.now(),
     }, {
         new: true,
     });
     const createMessageData = {
         message: payload === null || payload === void 0 ? void 0 : payload.message,
-        img: (payload === null || payload === void 0 ? void 0 : payload.img) ||
-            'https://img.freepik.com/free-photo/confident-attractive-caucasian-guy-beige-pullon-smiling-broadly-while-standing-against-gray_176420-44508.jpg?w=1380&t=st=1704185130~exp=1704185730~hmac=59e603b1b189517200baee240e19841cac32cac33e3b18bf388d3af232517699',
+        img: payload === null || payload === void 0 ? void 0 : payload.img,
         senderEmail: 'admin@admin.com',
         receiverEmail: updateUserIsChat === null || updateUserIsChat === void 0 ? void 0 : updateUserIsChat.email,
     };
