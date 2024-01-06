@@ -28,6 +28,7 @@ app.use(
       'http://localhost:3000',
       'https://blut-blood-donation-compaign.vercel.app',
       'https://blut-blood-donation-main.onrender.com',
+      'https://blut-blood-donation-main-78a9a3422464.herokuapp.com',
     ],
     credentials: true,
   })
@@ -73,8 +74,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 })
 
 // Separate socket connection logic
-initializeSocketConnection(io);
+initializeSocketConnection(io)
 
 export { app, port, server, io }
-
-

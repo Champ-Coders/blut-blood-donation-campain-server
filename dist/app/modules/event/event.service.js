@@ -30,7 +30,7 @@ const updateData = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const deleteData = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield event_model_1.Event.findOneAndDelete({ _id: id });
+    const result = yield event_model_1.Event.findOneAndDelete({ _id: id }).lean();
     return result;
 });
 exports.EventService = {
