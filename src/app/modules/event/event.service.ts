@@ -27,7 +27,7 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IEvent | null> => {
-  const result = await Event.findOneAndDelete({ _id: id })
+  const result = await Event.findOneAndDelete({ _id: id }).lean()
   return result
 }
 

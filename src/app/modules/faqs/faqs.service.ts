@@ -27,7 +27,7 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IFaqs | null> => {
-  const result = await Faqs.findOneAndDelete({ _id: id })
+  const result = await Faqs.findOneAndDelete({ _id: id }).lean()
   return result
 }
 

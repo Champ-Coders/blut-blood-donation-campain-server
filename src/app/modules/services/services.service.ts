@@ -27,7 +27,7 @@ const updateData = async (
 }
 
 const deleteData = async (id: string): Promise<IService | null> => {
-  const result = await Service.findOneAndDelete({ _id: id })
+  const result = await Service.findOneAndDelete({ _id: id }).lean()
   return result
 }
 
