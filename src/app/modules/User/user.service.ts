@@ -19,6 +19,7 @@ import {
 } from '../../../interfaces/common'
 import { paginationHelpers } from '../../../helpers/paginationHelpers'
 import { SortOrder } from 'mongoose'
+import nodemailer from 'nodemailer'
 
 const createUser = async (
   user: IUser
@@ -314,21 +315,48 @@ const getSingleUser = async (id: string): Promise<IUser | null> => {
 const forgetPassword = async (email: string): Promise<string> => {
   const user = await User.findOne({ email: email })
   if (!user) {
-    throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
+    throw new ApiError(httpStatus.CONFLICT, 'User does not exist!!!')
   }
+
   const tokenInfo = {
     id: user.id,
     email: user.email,
     role: user.role,
   }
+
   const token = jwtHelpers.createToken(
     tokenInfo,
     config.jwt.jwt_secret as Secret,
     '5m'
   )
-  const link = `http://localhost:5000/api/v1/users/reset-password/${user.id}/${token}`
-  console.log(link)
-  return link
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: config.nodeMailer.FromEmail,
+      pass: config.nodeMailer.appPassword,
+    },
+  })
+
+  const resetPasswordLink = `http://localhost:3000/reset-password/${user.id}/${token}`
+
+  const mailOptions = {
+    from: config.nodeMailer.FromEmail,
+    to: user.email,
+    subject: 'Forget Password',
+    html: `<h1>Change Password</h1><a href="${resetPasswordLink}">Reset Password</a>`,
+  }
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error)
+    } else {
+      console.log('Email sent: ' + info.response)
+    }
+  })
+
+  // You can return something meaningful here if needed
+  return 'Password reset email sent successfully.'
 }
 
 const resetPassword = async (id: string, token: string): Promise<string> => {
@@ -337,6 +365,7 @@ const resetPassword = async (id: string, token: string): Promise<string> => {
     throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')
   }
   jwtHelpers.verifyToken(token, config.jwt.jwt_secret as Secret)
+
   // need to work
   return 'link'
 }

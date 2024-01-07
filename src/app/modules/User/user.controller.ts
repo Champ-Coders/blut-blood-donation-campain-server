@@ -88,8 +88,10 @@ const myProfile = catchAsync(async (req: Request, res: Response) => {
 
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
   const userInfo = req?.user
-  console.log("🚀 ~ file: user.controller.ts:91 ~ updateProfile ~ userInfo:", userInfo)
-
+  console.log(
+    '🚀 ~ file: user.controller.ts:91 ~ updateProfile ~ userInfo:',
+    userInfo
+  )
 
   const result = await UserService.updateProfile(
     req.body,
