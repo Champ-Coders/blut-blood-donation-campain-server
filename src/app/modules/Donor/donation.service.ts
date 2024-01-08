@@ -357,6 +357,7 @@ const donationRequest = async (
   userInfo: UserInfoFromToken
 ): Promise<IDonation[] | null> => {
   const user = await User.findById(userInfo.id).select('+notification')
+
   if (!user) {
     throw new ApiError(httpStatus.CONFLICT, 'Your profile is not exist!!!')
   }
@@ -379,7 +380,7 @@ const donationRequest = async (
 const donationHistory = async (
   userInfo: UserInfoFromToken
 ): Promise<IDonation[] | null> => {
-  const user = await User.findById(userInfo.id).select('+notification')
+  const user = await User.findById(userInfo.id)
   //  user not found
   if (!user) {
     throw new ApiError(httpStatus.CONFLICT, 'User is not exist!!!')

@@ -1,4 +1,7 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 import { IContact } from './contact.interface'
 import { Contact } from './contact.model'
 import { sendMailer } from './sendMail'
@@ -59,6 +62,9 @@ const deleteData = async (id: string): Promise<IContact | null> => {
   const result = await Contact.findOneAndDelete({ _id: id }).lean()
   return result
 }
+
+
+
 
 export const ContactService = {
   insertIntoDB,
