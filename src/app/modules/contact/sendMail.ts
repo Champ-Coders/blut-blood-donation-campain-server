@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import config from '../../../config'
+// import config from '../../../config'
 
 export async function sendMailer(subject: string, from: string, html: string) {
   // console.log(
@@ -15,14 +15,17 @@ export async function sendMailer(subject: string, from: string, html: string) {
     port: 587, //!  port for smtp
     // secure: true,
     auth: {
-      user: config.nodeMailer.FromEmail, //! owner email
-      pass: config.nodeMailer.appPassword,
+      user: 'sarwarasik@gmail.com', //! owner email
+      pass: 'prqj ostc gjgw raqr',
     },
+    tls: {
+      rejectUnauthorized: false,
+    }
   })
 
   const sentResponse = await transporter.sendMail({
     from,
-    to: config.nodeMailer.FromEmail,
+    to: 'sarwarasik@gmail.com',
     subject,
     // text: 'Hello world?',
     html,
